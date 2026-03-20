@@ -251,11 +251,15 @@ def render_resgates(dados, info):
     df_dia = dados["resgates_dia"]
 
     c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Clientes que Resgataram", f"{int(total['clientes_resgataram']):,}")
-    c2.metric("Pontos Utilizados", f"{int(total['pontos_utilizados']):,}")
-    c3.metric("Números da Sorte", f"{int(total['numeros_sorte']):,}")
+    c1.metric("Clientes que Resgataram", f"{int(total['clientes_resgataram']):,}",
+              help="Clientes únicos que realizaram pelo menos 1 resgate de pontos por números da sorte.")
+    c2.metric("Pontos Utilizados", f"{int(total['pontos_utilizados']):,}",
+              help="Total de pontos resgatados pelos clientes. Calculado como Números da Sorte × 100.")
+    c3.metric("Números da Sorte", f"{int(total['numeros_sorte']):,}",
+              help=f"Total de números da sorte gerados. Cada {info.get('pontos_por_numero', 100)} pontos = 1 número da sorte.")
     media_pts = total["pontos_utilizados"] / total["clientes_resgataram"] if total["clientes_resgataram"] > 0 else 0
-    c4.metric("Média Pontos/Cliente", f"{media_pts:,.0f}")
+    c4.metric("Média Pontos/Cliente", f"{media_pts:,.0f}",
+              help="Média de pontos utilizados por cliente = Pontos Utilizados / Clientes que Resgataram.")
 
     if len(df_dia) > 0:
         fig = px.bar(
