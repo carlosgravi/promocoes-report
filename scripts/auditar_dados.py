@@ -96,21 +96,31 @@ def main():
           len(kpis) == 7, f"linhas: {len(kpis)}")
 
     # Valores nao negativos
-    for col in ["clientes_novos", "clientes_recorrentes", "clientes_totais",
-                "cupons_lancados", "valor_total", "lojas_na_promocao"]:
+    for col in ["clientes_novos_cadastro", "clientes_novos_cupom", "clientes_recorrentes",
+                "clientes_totais", "cupons_lancados", "valor_total", "lojas_na_promocao"]:
         check("KPIs", f"Sem valores negativos em '{col}'",
               (kpis[col] >= 0).all(), f"min: {kpis[col].min()}")
 
-    # Consistencia novos + recorrentes = totais (por shopping)
+    # Consistencia novos_cupom + recorrentes = totais (por shopping)
     kpis_shop = kpis[kpis["shopping_sigla"] != "TOTAL"]
+    total_row = kpis[kpis["shopping_sigla"] == "TOTAL"].iloc[0]
+
     for _, row in kpis_shop.iterrows():
-        soma = row["clientes_novos"] + row["clientes_recorrentes"]
-        check("KPIs", f"{row['shopping_sigla']}: novos({row['clientes_novos']}) + recorrentes({row['clientes_recorrentes']}) = totais({row['clientes_totais']})",
+        soma = row["clientes_novos_cupom"] + row["clientes_recorrentes"]
+        check("KPIs", f"{row['shopping_sigla']}: novos_cupom({int(row['clientes_novos_cupom'])}) + recorrentes({int(row['clientes_recorrentes'])}) = totais({int(row['clientes_totais'])})",
               soma == row["clientes_totais"],
               f"soma={soma}, total={row['clientes_totais']}")
 
+    # Novos cadastro (metrica independente)
+    check("KPIs", "Sem valores negativos em novos_cadastro",
+          (kpis_shop["clientes_novos_cadastro"] >= 0).all())
+    total_novos_cad_shop = kpis_shop["clientes_novos_cadastro"].sum()
+    total_novos_cad = total_row["clientes_novos_cadastro"]
+    check("KPIs", f"TOTAL novos_cadastro({int(total_novos_cad)}) >= soma shoppings({int(total_novos_cad_shop)})",
+          total_novos_cad >= total_novos_cad_shop,
+          "total = cadastros unicos no app; soma shoppings = por primeiro cupom (pode ser menor)")
+
     # Total = soma dos shoppings (cupons)
-    total_row = kpis[kpis["shopping_sigla"] == "TOTAL"].iloc[0]
     soma_cupons = kpis_shop["cupons_lancados"].sum()
     check("KPIs", f"TOTAL cupons({int(total_row['cupons_lancados'])}) = soma shoppings({soma_cupons})",
           total_row["cupons_lancados"] == soma_cupons)

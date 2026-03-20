@@ -245,12 +245,26 @@ def main():
     print("PROCESSANDO DADOS")
     print("=" * 60)
 
-    # --- Classificar clientes novos vs recorrentes ---
+    # --- Classificar clientes novos vs recorrentes (por cupom) ---
     clientes_promo = df_cupons[["cliente_id"]].drop_duplicates()
     clientes_promo = clientes_promo.merge(df_primeiro, on="cliente_id", how="left")
     clientes_promo["tipo"] = clientes_promo["primeiro_cupom"].apply(
         lambda x: "Novo" if x >= promo_inicio else "Recorrente"
     )
+
+    # --- Novos cadastros no app durante o periodo da promocao ---
+    df_cadastrados["data_cadastro"] = pd.to_datetime(df_cadastrados["data_cadastro"]).dt.tz_localize(None)
+    data_ate_dt = pd.to_datetime(data_ate) + pd.Timedelta(days=1)  # ate fim do dia
+    novos_cadastros = df_cadastrados[
+        (df_cadastrados["data_cadastro"] >= promo_inicio) &
+        (df_cadastrados["data_cadastro"] < data_ate_dt)
+    ]["cliente_id"].unique()
+    print(f"  Novos cadastros no periodo: {len(novos_cadastros)}")
+
+    # Atribuir shopping ao novo cadastro pelo primeiro cupom lancado no periodo
+    novos_cad_cupom = df_cupons[df_cupons["cliente_id"].isin(novos_cadastros)]
+    primeiro_cupom_novo = novos_cad_cupom.sort_values("data_envio").drop_duplicates("cliente_id", keep="first")
+    novos_cad_por_shopping = primeiro_cupom_novo.groupby("shopping_id")["cliente_id"].nunique()
 
     # --- KPIs por shopping ---
     kpis = []
@@ -262,6 +276,7 @@ def main():
 
         novos = cli_sub[cli_sub["tipo"] == "Novo"]["cliente_id"].nunique()
         recorrentes = cli_sub[cli_sub["tipo"] == "Recorrente"]["cliente_id"].nunique()
+        novos_cadastro = int(novos_cad_por_shopping.get(sid, 0))
         clientes_total = sub["cliente_id"].nunique()
         cupons_total = len(sub)
         valor_total = sub["valor"].sum()
@@ -284,7 +299,8 @@ def main():
             "shopping_id": sid,
             "shopping_sigla": sigla,
             "shopping_nome": nome,
-            "clientes_novos": novos,
+            "clientes_novos_cadastro": novos_cadastro,
+            "clientes_novos_cupom": novos,
             "clientes_recorrentes": recorrentes,
             "clientes_totais": clientes_total,
             "cupons_lancados": cupons_total,
@@ -300,7 +316,8 @@ def main():
         })
 
     # Linha TOTAL
-    total_novos = sum(k["clientes_novos"] for k in kpis)
+    total_novos_cadastro = len(novos_cadastros)  # total real (sem duplicar por shopping)
+    total_novos_cupom = sum(k["clientes_novos_cupom"] for k in kpis)
     total_recorrentes = sum(k["clientes_recorrentes"] for k in kpis)
     total_clientes = df_cupons["cliente_id"].nunique()
     total_cupons = len(df_cupons)
@@ -315,7 +332,8 @@ def main():
         "shopping_id": 0,
         "shopping_sigla": "TOTAL",
         "shopping_nome": "AJ (totais)",
-        "clientes_novos": total_novos,
+        "clientes_novos_cadastro": total_novos_cadastro,
+        "clientes_novos_cupom": total_novos_cupom,
         "clientes_recorrentes": total_recorrentes,
         "clientes_totais": total_clientes,
         "cupons_lancados": total_cupons,
@@ -373,7 +391,8 @@ def main():
     print(f"Periodo: {promo_inicio.date()} a {data_ate}")
     print("=" * 60)
     t = df_kpis[df_kpis["shopping_sigla"] == "TOTAL"].iloc[0]
-    print(f"  Clientes: {int(t['clientes_totais']):,} ({int(t['clientes_novos']):,} novos + {int(t['clientes_recorrentes']):,} recorrentes)")
+    print(f"  Clientes: {int(t['clientes_totais']):,} ({int(t['clientes_novos_cupom']):,} novos cupom + {int(t['clientes_recorrentes']):,} recorrentes)")
+    print(f"  Novos cadastros no app: {int(t['clientes_novos_cadastro']):,}")
     print(f"  Cupons: {int(t['cupons_lancados']):,}")
     print(f"  Valor: R$ {t['valor_total']:,.2f}")
     print(f"  TM Cliente: R$ {t['tm_cliente']:,.2f}")

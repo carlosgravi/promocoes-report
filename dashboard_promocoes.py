@@ -94,7 +94,8 @@ def render_tabela_kpis(df_kpis, info):
 
     # Montar dados
     metricas = [
-        ("Clientes Novos", "clientes_novos", "int"),
+        ("Clientes Novos Cadastro", "clientes_novos_cadastro", "int"),
+        ("Clientes Novos Cupons", "clientes_novos_cupom", "int"),
         ("Clientes Recorrentes", "clientes_recorrentes", "int"),
         ("Clientes Totais", "clientes_totais", "int"),
         ("Cupons Lancados", "cupons_lancados", "int"),
@@ -421,8 +422,8 @@ def render_validacao(dados, info):
           siglas == {"CS", "BS", "NK", "NR", "GS", "NS", "TOTAL"})
 
     for _, row in kpis_shop.iterrows():
-        soma = row["clientes_novos"] + row["clientes_recorrentes"]
-        check("KPIs", f"{row['shopping_sigla']}: novos + recorrentes = totais",
+        soma = row["clientes_novos_cupom"] + row["clientes_recorrentes"]
+        check("KPIs", f"{row['shopping_sigla']}: novos cupom + recorrentes = totais",
               soma == row["clientes_totais"],
               f"{int(soma)} {'=' if soma == row['clientes_totais'] else '!='} {int(row['clientes_totais'])}")
 
