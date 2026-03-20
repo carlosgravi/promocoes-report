@@ -250,16 +250,20 @@ def render_resgates(dados, info):
     total = df_kpis[df_kpis["shopping_sigla"] == "TOTAL"].iloc[0]
     df_dia = dados["resgates_dia"]
 
-    c1, c2, c3, c4 = st.columns(4)
-    c1.metric("Clientes que Resgataram", f"{int(total['clientes_resgataram']):,}",
-              help="Clientes únicos que realizaram pelo menos 1 resgate de pontos por números da sorte.")
-    c2.metric("Pontos Utilizados", f"{int(total['pontos_utilizados']):,}",
-              help="Total de pontos resgatados pelos clientes. Calculado como Números da Sorte × 100.")
-    c3.metric("Números da Sorte", f"{int(total['numeros_sorte']):,}",
-              help=f"Total de números da sorte gerados. Cada {info.get('pontos_por_numero', 100)} pontos = 1 número da sorte.")
+    total_resgates = int(df_dia["resgates"].sum()) if len(df_dia) > 0 else 0
     media_pts = total["pontos_utilizados"] / total["clientes_resgataram"] if total["clientes_resgataram"] > 0 else 0
-    c4.metric("Média Pontos/Cliente", f"{media_pts:,.0f}",
-              help="Média de pontos utilizados por cliente = Pontos Utilizados / Clientes que Resgataram.")
+
+    c1, c2, c3, c4, c5 = st.columns(5)
+    c1.metric("Total de Resgates", f"{total_resgates:,}",
+              help="Quantidade total de operações de resgate realizadas. Um cliente pode resgatar várias vezes.")
+    c2.metric("Clientes Únicos", f"{int(total['clientes_resgataram']):,}",
+              help="Clientes únicos que realizaram pelo menos 1 resgate de pontos por números da sorte.")
+    c3.metric("Pontos Utilizados", f"{int(total['pontos_utilizados']):,}",
+              help="Total de pontos resgatados pelos clientes. Calculado como Números da Sorte × 100.")
+    c4.metric("Números da Sorte", f"{int(total['numeros_sorte']):,}",
+              help=f"Total de números da sorte gerados. Cada {info.get('pontos_por_numero', 100)} pontos = 1 número da sorte.")
+    c5.metric("Média Pontos/Cliente", f"{media_pts:,.0f}",
+              help="Média de pontos utilizados por cliente = Pontos Utilizados / Clientes Únicos.")
 
     if len(df_dia) > 0:
         fig = px.bar(
