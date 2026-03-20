@@ -249,12 +249,15 @@ def main():
         if len(novos_cadastros) > 0:
             ids_str = ",".join(str(int(i)) for i in novos_cadastros)
             df_acesso = query_to_df(cur, f"""
-                SELECT cliente_id, shopping_id, time,
-                       ROW_NUMBER() OVER (PARTITION BY cliente_id ORDER BY time DESC) AS rn
-                FROM BRONZE.BRZ_AJFANS_LOG_ACESSO_APP
-                WHERE cliente_id IN ({ids_str})
-            """, "Buscando ultimo acesso dos novos cadastros")
-            df_acesso = df_acesso[df_acesso["rn"] == 1]
+                SELECT cliente_id, shopping_id
+                FROM (
+                    SELECT cliente_id, shopping_id,
+                           ROW_NUMBER() OVER (PARTITION BY cliente_id ORDER BY time DESC) AS rn
+                    FROM BRONZE.BRZ_AJFANS_LOG_ACESSO_APP
+                    WHERE cliente_id IN ({ids_str}) AND shopping_id IS NOT NULL
+                )
+                WHERE rn = 1
+            """, "Buscando ultimo acesso (com shopping) dos novos cadastros")
             novos_cad_por_shopping = df_acesso.groupby("shopping_id")["cliente_id"].nunique()
 
     finally:
