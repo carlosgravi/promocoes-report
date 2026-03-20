@@ -120,7 +120,7 @@ def main():
             "data_sorteio": str(promo_sorteio.date()),
             "pontos_por_numero": pontos_necessarios,
             "atualizado_em": datetime.now().strftime("%Y-%m-%d %H:%M"),
-            "dados_ate": str((date.today() - timedelta(days=1))),
+            "dados_ate": str((date.today() - timedelta(days=1))) + " (final do dia)",
         }
         with open(os.path.join(dados_dir, "promocao_info.json"), "w", encoding="utf-8") as f:
             json.dump(promo_info, f, ensure_ascii=False, indent=2)

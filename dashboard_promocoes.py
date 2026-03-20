@@ -155,6 +155,9 @@ def render_tabela_kpis(df_kpis, info):
     header += " **AJ (totais)** |"
     sep_line += "---:|"
 
+    # Colunas onde o total é clientes únicos (pode ser menor que soma dos shoppings)
+    cols_cliente_unico = {"clientes_totais", "clientes_resgataram"}
+
     # Rows
     rows = []
     for label, col, tipo, tooltip in metricas:
@@ -167,7 +170,13 @@ def render_tabela_kpis(df_kpis, info):
             sub = shoppings[shoppings["shopping_sigla"] == s]
             val = sub[col].iloc[0] if len(sub) > 0 and col else 0
             row += f" {fmt(val, tipo)} |"
-        row += f" {fmt(total[col], tipo)} |"
+        total_val = fmt(total[col], tipo)
+        if col in cols_cliente_unico:
+            soma_shops = int(shoppings[col].sum())
+            total_int = int(total[col])
+            if soma_shops != total_int:
+                total_val += f' <abbr title="Total de clientes únicos ({total_int}). A soma dos shoppings é {soma_shops} porque {soma_shops - total_int} cliente(s) compraram em mais de um shopping.">*</abbr>'
+        row += f" {total_val} |"
         rows.append(row)
 
     tabela = header + "\n" + sep_line + "\n" + "\n".join(rows)
