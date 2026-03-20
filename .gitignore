@@ -1,0 +1,11 @@
+__pycache__/
+*.py[cod]
+*.pyo
+.env
+.venv/
+venv/
+*.log
+.DS_Store
+Thumbs.db
+scripts/config_snowflake.ini
+scripts/rsa_key.p8

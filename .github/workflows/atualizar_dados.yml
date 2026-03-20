@@ -1,0 +1,86 @@
+name: Atualizar Dados Promocao
+
+on:
+  schedule:
+    # Todo dia as 00:15 horario de Brasilia (UTC-3 = 03:15 UTC)
+    - cron: '15 3 * * *'
+  workflow_dispatch:
+
+env:
+  PYTHON_VERSION: '3.11'
+
+permissions:
+  contents: write
+
+jobs:
+  atualizar-dados:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repositorio
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Configurar Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: ${{ env.PYTHON_VERSION }}
+          cache: 'pip'
+
+      - name: Instalar dependencias
+        run: |
+          pip install --upgrade pip
+          pip install snowflake-connector-python cryptography pandas
+
+      - name: Configurar chave privada Snowflake
+        run: |
+          echo "${{ secrets.SNOWFLAKE_PRIVATE_KEY }}" | base64 -d > scripts/rsa_key.p8
+          chmod 600 scripts/rsa_key.p8
+
+      - name: Criar arquivo de configuracao Snowflake
+        run: |
+          cat > scripts/config_snowflake.ini << EOF
+          [snowflake]
+          account = ${{ secrets.SNOWFLAKE_ACCOUNT }}
+          user = ${{ secrets.SNOWFLAKE_USER }}
+          warehouse = ${{ secrets.SNOWFLAKE_WAREHOUSE }}
+          database = ${{ secrets.SNOWFLAKE_DATABASE }}
+          schema = ${{ secrets.SNOWFLAKE_SCHEMA }}
+          role = ${{ secrets.SNOWFLAKE_ROLE }}
+          private_key_path = rsa_key.p8
+          EOF
+
+      - name: Extrair dados da promocao
+        run: |
+          cd scripts
+          python extrair_dados_promocao.py
+
+      - name: Limpar arquivos sensiveis
+        run: |
+          rm -f scripts/rsa_key.p8
+          rm -f scripts/config_snowflake.ini
+
+      - name: Commit e Push
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+          git add dados/
+          git diff --cached --quiet && echo "Sem alteracoes" && exit 0
+
+          DATA_HORA=$(TZ='America/Sao_Paulo' date '+%Y-%m-%d %H:%M')
+          git commit -m "data: atualizacao automatica promocao - $DATA_HORA
+
+          Co-Authored-By: GitHub Actions <actions@github.com>"
+
+          git push origin main
+
+      - name: Resumo
+        run: |
+          echo "## Atualizacao Promocao Concluida" >> $GITHUB_STEP_SUMMARY
+          echo "- **Data/Hora:** $(TZ='America/Sao_Paulo' date '+%Y-%m-%d %H:%M')" >> $GITHUB_STEP_SUMMARY
+          if [ -f "dados/promocao_info.json" ]; then
+            echo "- **Promocao:** $(python3 -c 'import json; d=json.load(open("dados/promocao_info.json")); print(d["titulo"])')" >> $GITHUB_STEP_SUMMARY
+            echo "- **Dados ate:** $(python3 -c 'import json; d=json.load(open("dados/promocao_info.json")); print(d["dados_ate"])')" >> $GITHUB_STEP_SUMMARY
+          fi
