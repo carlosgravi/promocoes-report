@@ -96,8 +96,8 @@ def render_tabela_kpis(df_kpis, info):
     shoppings = df_kpis[df_kpis["shopping_sigla"] != "TOTAL"].sort_values("shopping_sigla")
     total = df_kpis[df_kpis["shopping_sigla"] == "TOTAL"].iloc[0]
 
-    # Ordem das colunas como na imagem: NK, BS, GS, NR, CS, NS, TOTAL
-    ordem = ["NK", "BS", "GS", "NR", "CS", "NS"]
+    # Ordem das colunas: CS, BS, NK, NR, GS, NS, TOTAL
+    ordem = ["CS", "BS", "NK", "NR", "GS", "NS"]
     colunas = [s for s in ordem if s in shoppings["shopping_sigla"].values]
 
     # Montar dados: (label, coluna, tipo, tooltip)
