@@ -303,7 +303,7 @@ def main():
 
         # Resgates
         res_sub = df_resgates[df_resgates["shopping_id"] == sid] if len(df_resgates) > 0 else pd.DataFrame()
-        pontos_usados = int(res_sub["pontos_totais"].sum()) if len(res_sub) > 0 else 0
+        pontos_usados = int(res_sub["quantidade_numeros"].sum() * 100) if len(res_sub) > 0 else 0
         numeros_gerados = int(res_sub["quantidade_numeros"].sum()) if len(res_sub) > 0 else 0
         clientes_resgataram = res_sub["cliente_id"].nunique() if len(res_sub) > 0 else 0
 
@@ -390,9 +390,10 @@ def main():
         df_resg_dia = df_resgates.groupby(df_resgates["data_resgate"].dt.date).agg(
             resgates=("id", "count"),
             clientes_unicos=("cliente_id", "nunique"),
-            pontos_totais=("pontos_totais", "sum"),
             numeros_totais=("quantidade_numeros", "sum"),
         ).reset_index()
+        df_resg_dia["pontos_totais"] = df_resg_dia["numeros_totais"] * 100
+        df_resg_dia = df_resg_dia[["data_resgate", "resgates", "clientes_unicos", "pontos_totais", "numeros_totais"]]
         df_resg_dia.columns = ["data", "resgates", "clientes_unicos", "pontos_totais", "numeros_totais"]
         df_resg_dia.to_csv(os.path.join(dados_dir, "resgates_por_dia.csv"), index=False, encoding="utf-8-sig")
         print(f"[OK] resgates_por_dia.csv: {len(df_resg_dia)} linhas")

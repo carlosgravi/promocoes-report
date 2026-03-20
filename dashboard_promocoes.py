@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Dashboard Promocoes - Report
+Dashboard Promoções - Report
 =============================
-Acompanhamento de promocoes dos shoppings Almeida Junior.
+Acompanhamento de promoções dos shoppings Almeida Junior.
 """
 import json
 import math
@@ -14,7 +14,7 @@ import plotly.graph_objects as go
 from datetime import datetime
 
 st.set_page_config(
-    page_title="Promocoes - Report",
+    page_title="Promoções - Report",
     page_icon="🎯",
     layout="wide",
     initial_sidebar_state="collapsed",
@@ -56,7 +56,6 @@ st.markdown("""
 """, unsafe_allow_html=True)
 
 
-@st.cache_data(ttl=300)
 def carregar_dados():
     """Carrega todos os CSVs e o JSON de info da promo."""
     dados = {}
@@ -64,7 +63,7 @@ def carregar_dados():
         with open("dados/promocao_info.json", "r", encoding="utf-8") as f:
             dados["info"] = json.load(f)
     except FileNotFoundError:
-        st.error("Dados nao encontrados. Execute o script de extracao primeiro.")
+        st.error("Dados não encontrados. Execute o script de extração primeiro.")
         st.stop()
 
     dados["kpis"] = pd.read_csv("dados/kpis_promocao.csv", encoding="utf-8-sig")
@@ -91,7 +90,7 @@ def formatar_brl(valor):
 
 
 def render_tabela_kpis(df_kpis, info):
-    """Renderiza a tabela principal de KPIs estilo report."""
+    """Renderiza a tabela principal de KPIs estilo relatório."""
     # Separar shoppings e total
     shoppings = df_kpis[df_kpis["shopping_sigla"] != "TOTAL"].sort_values("shopping_sigla")
     total = df_kpis[df_kpis["shopping_sigla"] == "TOTAL"].iloc[0]
@@ -103,35 +102,35 @@ def render_tabela_kpis(df_kpis, info):
     # Montar dados: (label, coluna, tipo, tooltip)
     metricas = [
         ("Clientes Novos Cadastro", "clientes_novos_cadastro", "int",
-         "Clientes que criaram conta no app durante o periodo da promocao. Shopping atribuido pelo ultimo acesso no app."),
+         "Clientes que criaram conta no app durante o período da promoção. Shopping atribuído pelo último acesso no app."),
         ("Clientes Novos Cupons", "clientes_novos_cupom", "int",
-         "Clientes que lancaram seu primeiro cupom validado de todos os tempos durante a promocao."),
+         "Clientes que lançaram seu primeiro cupom validado de todos os tempos durante a promoção."),
         ("Clientes Recorrentes", "clientes_recorrentes", "int",
-         "Clientes que ja tinham cupons validados antes do inicio da promocao."),
+         "Clientes que já tinham cupons validados antes do início da promoção."),
         ("Clientes Totais", "clientes_totais", "int",
-         "Total de clientes unicos que lancaram pelo menos 1 cupom validado durante a promocao."),
-        ("Cupons Lancados", "cupons_lancados", "int",
-         "Quantidade total de cupons com status Validado no periodo."),
+         "Total de clientes únicos que lançaram pelo menos 1 cupom validado durante a promoção."),
+        ("Cupons Lançados", "cupons_lancados", "int",
+         "Quantidade total de cupons com status Validado no período."),
         ("R$", "valor_total", "brl",
-         "Soma do valor de compra de todos os cupons validados no periodo."),
+         "Soma do valor de compra de todos os cupons validados no período."),
         ("TM Cliente", "tm_cliente", "brl_sm",
-         "Ticket Medio por Cliente = Valor Total / Clientes Totais."),
+         "Ticket Médio por Cliente = Valor Total / Clientes Totais."),
         ("TM Cupom", "tm_cupom", "brl_sm",
-         "Ticket Medio por Cupom = Valor Total / Cupons Lancados."),
+         "Ticket Médio por Cupom = Valor Total / Cupons Lançados."),
         ("", "", "sep", ""),
-        ("Lojas na Promocao", "lojas_na_promocao", "int",
-         "Total de lojas cadastradas no shopping (todas participam da promocao)."),
-        ("Lojas c/ Cupons Lancados", "lojas_com_cupons", "int",
-         "Lojas que tiveram pelo menos 1 cupom validado durante o periodo."),
-        ("Taxa de Conversao", "taxa_conversao_lojas", "pct",
-         "Percentual de lojas com cupons lancados em relacao ao total de lojas do shopping."),
+        ("Lojas na Promoção", "lojas_na_promocao", "int",
+         "Total de lojas cadastradas no shopping (todas participam da promoção)."),
+        ("Lojas c/ Cupons Lançados", "lojas_com_cupons", "int",
+         "Lojas que tiveram pelo menos 1 cupom validado durante o período."),
+        ("Taxa de Conversão", "taxa_conversao_lojas", "pct",
+         "Percentual de lojas com cupons lançados em relação ao total de lojas do shopping."),
         ("", "", "sep", ""),
         ("Pontos Utilizados", "pontos_utilizados", "int",
-         "Total de pontos resgatados pelos clientes para gerar numeros da sorte."),
-        ("Numeros da Sorte", "numeros_sorte", "int",
-         "Total de numeros da sorte gerados. Cada 100 pontos = 1 numero da sorte."),
+         "Total de pontos resgatados pelos clientes para gerar números da sorte."),
+        ("Números da Sorte", "numeros_sorte", "int",
+         "Total de números da sorte gerados. Cada 100 pontos = 1 número da sorte."),
         ("Clientes que Resgataram", "clientes_resgataram", "int",
-         "Clientes unicos que realizaram pelo menos 1 resgate de pontos por numeros da sorte."),
+         "Clientes únicos que realizaram pelo menos 1 resgate de pontos por números da sorte."),
     ]
 
     def fmt(val, tipo):
@@ -148,7 +147,7 @@ def render_tabela_kpis(df_kpis, info):
         return str(val)
 
     # Header
-    header = "| Metrica |"
+    header = "| Métrica |"
     sep_line = "|:---|"
     for s in colunas:
         header += f" **{s}** |"
@@ -176,54 +175,54 @@ def render_tabela_kpis(df_kpis, info):
 
 
 def render_serie_temporal(dados, info):
-    """Renderiza graficos de serie temporal."""
+    """Renderiza gráficos de série temporal."""
     df = dados["serie_total"].copy()
     promo_inicio = pd.Timestamp(info["data_inicio"])
 
-    # Grafico de cupons por dia
+    # Gráfico de cupons por dia
     fig_cupons = go.Figure()
     df_pre = df[~df["na_promocao"]]
     df_promo = df[df["na_promocao"]]
 
     fig_cupons.add_trace(go.Bar(
         x=df_pre["data"], y=df_pre["cupons"],
-        name="Pre-Promocao", marker_color="#94a3b8",
+        name="Pré-Promoção", marker_color="#94a3b8",
     ))
     fig_cupons.add_trace(go.Bar(
         x=df_promo["data"], y=df_promo["cupons"],
-        name="Promocao", marker_color="#3b82f6",
+        name="Promoção", marker_color="#3b82f6",
     ))
     fig_cupons.add_vline(x=promo_inicio, line_dash="dash", line_color="red", line_width=2)
     fig_cupons.add_annotation(
         x=promo_inicio, y=1, yref="paper",
-        text="Inicio Promo", showarrow=False,
+        text="Início Promo", showarrow=False,
         font=dict(color="red", size=11), yshift=10,
     )
     media_pre = df_pre["cupons"].mean() if len(df_pre) > 0 else 0
     fig_cupons.add_hline(y=media_pre, line_dash="dot", line_color="#64748b",
-                         annotation_text=f"Media pre-promo: {media_pre:,.0f}", annotation_position="top left")
+                         annotation_text=f"Média pré-promo: {media_pre:,.0f}", annotation_position="top left")
     fig_cupons.update_layout(
-        title="Cupons Lancados por Dia (60 dias)",
+        title="Cupons Lançados por Dia (60 dias)",
         xaxis_title="", yaxis_title="Cupons",
         template="plotly_white", height=400,
         legend=dict(orientation="h", yanchor="bottom", y=1.02),
         margin=dict(l=40, r=20, t=60, b=40),
     )
 
-    # Grafico de valor por dia
+    # Gráfico de valor por dia
     fig_valor = go.Figure()
     fig_valor.add_trace(go.Bar(
         x=df_pre["data"], y=df_pre["valor_total"],
-        name="Pre-Promocao", marker_color="#94a3b8",
+        name="Pré-Promoção", marker_color="#94a3b8",
     ))
     fig_valor.add_trace(go.Bar(
         x=df_promo["data"], y=df_promo["valor_total"],
-        name="Promocao", marker_color="#22c55e",
+        name="Promoção", marker_color="#22c55e",
     ))
     fig_valor.add_vline(x=promo_inicio, line_dash="dash", line_color="red", line_width=2)
     media_valor_pre = df_pre["valor_total"].mean() if len(df_pre) > 0 else 0
     fig_valor.add_hline(y=media_valor_pre, line_dash="dot", line_color="#64748b",
-                        annotation_text=f"Media: R$ {media_valor_pre:,.0f}", annotation_position="top left")
+                        annotation_text=f"Média: R$ {media_valor_pre:,.0f}", annotation_position="top left")
     fig_valor.update_layout(
         title="Valor Total por Dia (R$)",
         xaxis_title="", yaxis_title="R$",
@@ -236,7 +235,7 @@ def render_serie_temporal(dados, info):
 
 
 def render_resgates(dados, info):
-    """Renderiza metricas de resgate de pontos."""
+    """Renderiza métricas de resgate de pontos."""
     df_kpis = dados["kpis"]
     total = df_kpis[df_kpis["shopping_sigla"] == "TOTAL"].iloc[0]
     df_dia = dados["resgates_dia"]
@@ -244,16 +243,16 @@ def render_resgates(dados, info):
     c1, c2, c3, c4 = st.columns(4)
     c1.metric("Clientes que Resgataram", f"{int(total['clientes_resgataram']):,}")
     c2.metric("Pontos Utilizados", f"{int(total['pontos_utilizados']):,}")
-    c3.metric("Numeros da Sorte", f"{int(total['numeros_sorte']):,}")
+    c3.metric("Números da Sorte", f"{int(total['numeros_sorte']):,}")
     media_pts = total["pontos_utilizados"] / total["clientes_resgataram"] if total["clientes_resgataram"] > 0 else 0
-    c4.metric("Media Pontos/Cliente", f"{media_pts:,.0f}")
+    c4.metric("Média Pontos/Cliente", f"{media_pts:,.0f}")
 
     if len(df_dia) > 0:
         fig = px.bar(
             df_dia, x="data", y="numeros_totais",
             text="numeros_totais",
-            labels={"data": "", "numeros_totais": "Numeros da Sorte"},
-            title="Numeros da Sorte Gerados por Dia",
+            labels={"data": "", "numeros_totais": "Números da Sorte"},
+            title="Números da Sorte Gerados por Dia",
             color_discrete_sequence=["#8b5cf6"],
         )
         fig.update_layout(template="plotly_white", height=350, margin=dict(l=40, r=20, t=60, b=40))
@@ -264,8 +263,8 @@ def render_resgates(dados, info):
     df_resg_shop = df_kpis[df_kpis["shopping_sigla"] != "TOTAL"][
         ["shopping_sigla", "clientes_resgataram", "pontos_utilizados", "numeros_sorte"]
     ].copy()
-    df_resg_shop.columns = ["Shopping", "Clientes", "Pontos", "Numeros"]
-    df_resg_shop = df_resg_shop.sort_values("Numeros", ascending=False)
+    df_resg_shop.columns = ["Shopping", "Clientes", "Pontos", "Números"]
+    df_resg_shop = df_resg_shop.sort_values("Números", ascending=False)
     st.dataframe(df_resg_shop, use_container_width=True, hide_index=True)
 
 
@@ -280,10 +279,10 @@ def main():
     # Header
     st.markdown(f"""
     <div class="promo-header">
-        <h1>🎯 Promocoes - Report</h1>
-        <p>{info['titulo']} | Periodo: {info['data_inicio']} a {info['data_fim']} | Sorteio: {info['data_sorteio']}</p>
+        <h1>🎯 Promoções - Report</h1>
+        <p>{info['titulo']} | Período: {info['data_inicio']} a {info['data_fim']} | Sorteio: {info['data_sorteio']}</p>
         <p style="color: #70a0ff; font-size: 0.85rem;">
-            Atualizado em: {info['atualizado_em']} &nbsp;&nbsp;|&nbsp;&nbsp; Dados ate: {info['dados_ate']}
+            Atualizado em: {info['atualizado_em']} &nbsp;&nbsp;|&nbsp;&nbsp; Dados até: {info['dados_ate']}
         </p>
     </div>
     """, unsafe_allow_html=True)
@@ -291,17 +290,17 @@ def main():
     # ============================================================
     # TAB PRINCIPAL
     # ============================================================
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Report Geral", "📈 Serie Temporal", "🎰 Resgates de Pontos", "🔍 Validacao"])
+    tab1, tab2, tab3, tab4 = st.tabs(["📊 Report Geral", "📈 Série Temporal", "🎰 Resgates de Pontos", "🔍 Validação"])
 
     with tab1:
         # KPIs destaque
         total = df_kpis[df_kpis["shopping_sigla"] == "TOTAL"].iloc[0]
         c1, c2, c3, c4, c5 = st.columns(5)
         c1.metric("Clientes Totais", f"{int(total['clientes_totais']):,}")
-        c2.metric("Cupons Lancados", f"{int(total['cupons_lancados']):,}")
+        c2.metric("Cupons Lançados", f"{int(total['cupons_lancados']):,}")
         c3.metric("Valor Total", formatar_brl(total["valor_total"]))
         c4.metric("TM Cliente", f"R$ {total['tm_cliente']:,.0f}")
-        c5.metric("Numeros da Sorte", f"{int(total['numeros_sorte']):,}")
+        c5.metric("Números da Sorte", f"{int(total['numeros_sorte']):,}")
 
         st.markdown("---")
 
@@ -309,7 +308,7 @@ def main():
         st.subheader("Detalhamento por Shopping")
         render_tabela_kpis(df_kpis, info)
 
-        # Graficos comparativos por shopping
+        # Gráficos comparativos por shopping
         st.markdown("---")
         shoppings = df_kpis[df_kpis["shopping_sigla"] != "TOTAL"].copy()
 
@@ -344,8 +343,8 @@ def main():
                 shoppings.sort_values("taxa_conversao_lojas", ascending=True),
                 x="taxa_conversao_lojas", y="shopping_sigla",
                 orientation="h", text_auto=".0f",
-                labels={"taxa_conversao_lojas": "% Conversao", "shopping_sigla": ""},
-                title="Taxa de Conversao de Lojas (%)",
+                labels={"taxa_conversao_lojas": "% Conversão", "shopping_sigla": ""},
+                title="Taxa de Conversão de Lojas (%)",
                 color_discrete_sequence=["#f59e0b"],
             )
             fig.update_layout(template="plotly_white", height=350, margin=dict(l=40, r=20, t=60, b=40))
@@ -355,7 +354,7 @@ def main():
         with col4:
             fig = px.pie(
                 shoppings, values="cupons_lancados", names="shopping_sigla",
-                title="Distribuicao de Cupons por Shopping",
+                title="Distribuição de Cupons por Shopping",
                 color_discrete_sequence=px.colors.qualitative.Set2,
             )
             fig.update_layout(height=350, margin=dict(l=20, r=20, t=60, b=40))
@@ -363,9 +362,9 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
 
     with tab2:
-        st.subheader("Serie Temporal - Impacto da Promocao")
+        st.subheader("Série Temporal - Impacto da Promoção")
         st.info(
-            f"Comparativo dos ultimos 60 dias. A linha vermelha marca o inicio da promocao "
+            f"Comparativo dos últimos 60 dias. A linha vermelha marca o início da promoção "
             f"**{info['titulo']}** em **{info['data_inicio']}**."
         )
 
@@ -374,8 +373,8 @@ def main():
         st.plotly_chart(fig_cupons, use_container_width=True)
         st.plotly_chart(fig_valor, use_container_width=True)
 
-        # Serie por shopping
-        with st.expander("Serie por Shopping"):
+        # Série por shopping
+        with st.expander("Série por Shopping"):
             shopping_sel = st.selectbox("Shopping", ["Todos"] + sorted(dados["serie"]["shopping_sigla"].dropna().unique()))
             df_s = dados["serie"].copy()
             if shopping_sel != "Todos":
@@ -391,10 +390,10 @@ def main():
             st.plotly_chart(fig, use_container_width=True)
 
     with tab3:
-        st.subheader("Resgates de Pontos - Numeros da Sorte")
+        st.subheader("Resgates de Pontos - Números da Sorte")
         st.info(
             f"Cada **{info.get('pontos_por_numero', 100)} pontos** utilizados geram "
-            f"**1 numero da sorte** para o sorteio de **{info['data_sorteio']}**."
+            f"**1 número da sorte** para o sorteio de **{info['data_sorteio']}**."
         )
 
         if len(dados["resgates"]) > 0:
@@ -407,9 +406,9 @@ def main():
 
 
 def render_validacao(dados, info):
-    """Renderiza a aba de validacao de integridade dos dados."""
-    st.subheader("Validacao de Integridade dos Dados")
-    st.caption("Testes automaticos para garantir consistencia e veracidade dos dados extraidos.")
+    """Renderiza a aba de validação de integridade dos dados."""
+    st.subheader("Validação de Integridade dos Dados")
+    st.caption("Testes automáticos para garantir consistência e veracidade dos dados extraídos.")
 
     kpis = dados["kpis"]
     serie = dados["serie_total"].copy()
@@ -434,10 +433,10 @@ def render_validacao(dados, info):
         check("Estrutura", f"Arquivo {arq} presente", os.path.exists(f"dados/{arq}"))
 
     # === 2. Promo Info ===
-    check("Promocao", "data_inicio < data_fim", info["data_inicio"] < info["data_fim"],
+    check("Promoção", "data_inicio < data_fim", info["data_inicio"] < info["data_fim"],
           f"{info['data_inicio']} < {info['data_fim']}")
-    check("Promocao", "data_fim < data_sorteio", info["data_fim"] < info["data_sorteio"])
-    check("Promocao", "pontos_por_numero = 100", info["pontos_por_numero"] == 100)
+    check("Promoção", "data_fim < data_sorteio", info["data_fim"] < info["data_sorteio"])
+    check("Promoção", "pontos_por_numero = 100", info["pontos_por_numero"] == 100)
 
     # === 3. KPIs ===
     siglas = set(kpis["shopping_sigla"].unique())
@@ -465,7 +464,7 @@ def render_validacao(dados, info):
           total_row["pontos_utilizados"] == soma_pontos)
 
     soma_numeros = kpis_shop["numeros_sorte"].sum()
-    check("KPIs", "TOTAL numeros = soma shoppings",
+    check("KPIs", "TOTAL números = soma shoppings",
           total_row["numeros_sorte"] == soma_numeros)
 
     for _, row in kpis.iterrows():
@@ -478,36 +477,36 @@ def render_validacao(dados, info):
             check("KPIs", f"{row['shopping_sigla']}: TM cupom correto",
                   abs(row["tm_cupom"] - tm_esp) < 0.02)
 
-    # === 4. Serie Temporal ===
+    # === 4. Série Temporal ===
     n_dias = serie["data"].nunique()
-    check("Serie", f"~60 dias na serie ({n_dias})", 55 <= n_dias <= 65)
+    check("Série", f"~60 dias na série ({n_dias})", 55 <= n_dias <= 65)
 
     dupes = serie_det.groupby(["data", "shopping_id"]).size()
-    check("Serie", "Sem duplicatas (data + shopping)", (dupes == 1).all())
+    check("Série", "Sem duplicatas (data + shopping)", (dupes == 1).all())
 
     shops_dia = serie_det.groupby("data")["shopping_id"].nunique()
-    check("Serie", "6 shoppings em cada dia", shops_dia.min() >= 5,
+    check("Série", "6 shoppings em cada dia", shops_dia.min() >= 5,
           f"min={shops_dia.min()}, max={shops_dia.max()}")
 
     serie_agg = serie_det.groupby("data")["cupons"].sum().reset_index()
     serie_agg["data"] = pd.to_datetime(serie_agg["data"])
     merged = serie.merge(serie_agg, on="data", suffixes=("_total", "_soma"))
-    check("Serie", "serie_total.cupons = soma(serie.cupons)",
+    check("Série", "serie_total.cupons = soma(serie.cupons)",
           (merged["cupons_total"] == merged["cupons_soma"]).all())
 
-    check("Serie", "Flag na_promocao correto",
+    check("Série", "Flag na_promocao correto",
           (serie[serie["na_promocao"] == True]["data"] >= promo_inicio).all() and
           (serie[serie["na_promocao"] == False]["data"] < promo_inicio).all())
 
     datas_range = pd.date_range(serie["data"].min(), serie["data"].max())
     dias_faltantes = set(datas_range) - set(serie["data"])
-    check("Serie", "Sem dias faltantes", len(dias_faltantes) == 0,
+    check("Série", "Sem dias faltantes", len(dias_faltantes) == 0,
           f"{len(dias_faltantes)} dias ausentes" if dias_faltantes else "")
 
     # Cross-check serie dia 19/03 vs KPIs
     dia_inicio = serie[serie["data"] == promo_inicio]
     if len(dia_inicio) > 0:
-        check("Serie", "Cupons dia inicio = KPI total",
+        check("Série", "Cupons dia início = KPI total",
               int(dia_inicio.iloc[0]["cupons"]) == int(total_row["cupons_lancados"]),
               f"serie={int(dia_inicio.iloc[0]['cupons'])}, kpi={int(total_row['cupons_lancados'])}")
 
@@ -524,20 +523,21 @@ def render_validacao(dados, info):
         n_mismatch_saldo = int((~match_saldo).sum())
         check("Resgates", "pontos = saldo_anterior - saldo_posterior",
               n_mismatch_saldo == 0,
-              f"{n_mismatch_saldo} divergencias (dados origem)" if n_mismatch_saldo > 0 else "")
+              f"{n_mismatch_saldo} divergências (dados de origem)" if n_mismatch_saldo > 0 else "")
 
         numeros_esp = resgates.apply(
             lambda r: max(1, math.ceil(r["pontos_totais"] / r["pontos_unitarios"])) if r["pontos_unitarios"] > 0 else 0, axis=1)
         match_num = (numeros_esp == resgates["quantidade_numeros"])
         pct_match = match_num.mean() * 100
-        check("Resgates", f"numeros = ceil(pontos/100) ({pct_match:.0f}%)",
+        check("Resgates", f"números = ceil(pontos/100) ({pct_match:.0f}%)",
               pct_match >= 95,
-              f"{int((~match_num).sum())} divergencias — logica do backend diferente" if pct_match < 95 else "")
+              f"{int((~match_num).sum())} divergências — lógica do backend diferente" if pct_match < 95 else "")
 
         for _, row in kpis_shop.iterrows():
             res_sub = resgates[resgates["shopping_id"] == row["shopping_id"]]
+            pontos_det = int(res_sub["quantidade_numeros"].sum() * 100)
             check("Resgates", f"{row['shopping_sigla']}: pontos KPI = detalhado",
-                  int(row["pontos_utilizados"]) == int(res_sub["pontos_totais"].sum()))
+                  int(row["pontos_utilizados"]) == pontos_det)
 
         resgates["data_resgate"] = pd.to_datetime(resgates["data_resgate"])
         antes = resgates[resgates["data_resgate"].dt.normalize() < promo_inicio]
@@ -551,7 +551,7 @@ def render_validacao(dados, info):
               int(resg_dia["resgates"].sum()) == len(resgates))
         check("Resg/Dia", "Total pontos = KPI",
               int(resg_dia["pontos_totais"].sum()) == int(total_row["pontos_utilizados"]))
-        check("Resg/Dia", "Total numeros = KPI",
+        check("Resg/Dia", "Total números = KPI",
               int(resg_dia["numeros_totais"].sum()) == int(total_row["numeros_sorte"]))
 
     # === Render ===
@@ -571,7 +571,7 @@ def render_validacao(dados, info):
     if os.path.exists(audit_path):
         with open(audit_path, encoding="utf-8") as f:
             audit = json.load(f)
-        st.caption(f"Ultima auditoria offline: {audit.get('data_auditoria', 'N/A')} — {audit['pass']} pass / {audit['fail']} fail")
+        st.caption(f"Última auditoria offline: {audit.get('data_auditoria', 'N/A')} — {audit['pass']} pass / {audit['fail']} fail")
 
     # Tabela por grupo
     for grupo in df_res["grupo"].unique():
@@ -598,7 +598,7 @@ def render_validacao(dados, info):
     # Anomalias
     if len(resgates) > 0:
         st.markdown("---")
-        st.subheader("Analise de Anomalias")
+        st.subheader("Análise de Anomalias")
 
         col1, col2 = st.columns(2)
         with col1:
@@ -611,11 +611,11 @@ def render_validacao(dados, info):
             st.caption(f"Top 5 concentram {top5['% do Total'].sum():.1f}% do total de pontos")
 
         with col2:
-            st.markdown("**Resgates com maior volume de numeros:**")
+            st.markdown("**Resgates com maior volume de números:**")
             big = resgates.nlargest(5, "quantidade_numeros")[
                 ["id", "cliente_id", "shopping_sigla", "pontos_totais", "quantidade_numeros"]
             ].copy()
-            big.columns = ["ID", "Cliente", "Shopping", "Pontos", "Numeros"]
+            big.columns = ["ID", "Cliente", "Shopping", "Pontos", "Números"]
             st.dataframe(big, use_container_width=True, hide_index=True)
 
         # Outliers serie temporal
@@ -623,10 +623,10 @@ def render_validacao(dados, info):
         std = serie["cupons"].std()
         outliers = serie[(serie["cupons"] > media + 3 * std) | (serie["cupons"] < media - 3 * std)]
         if len(outliers) > 0:
-            st.warning(f"**{len(outliers)} dia(s) com volume atipico de cupons (>3 desvios-padrao)**")
+            st.warning(f"**{len(outliers)} dia(s) com volume atípico de cupons (>3 desvios-padrão)**")
             st.dataframe(outliers[["data", "cupons", "valor_total"]], hide_index=True)
         else:
-            st.success("Nenhum outlier extremo na serie temporal de cupons (3-sigma)")
+            st.success("Nenhum outlier extremo na série temporal de cupons (3-sigma)")
 
 
 if __name__ == "__main__":

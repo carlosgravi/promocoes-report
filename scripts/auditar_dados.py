@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 """
-Auditoria de Integridade dos Dados - Promocoes Report
+Auditoria de Integridade dos Dados - Promoções Report
 =====================================================
-Valida consistencia, integridade e veracidade dos dados extraidos.
+Valida consistência, integridade e veracidade dos dados extraídos.
 """
 import io
 import os
@@ -58,7 +58,7 @@ def main():
 
     # ============================================================
     print("\n" + "=" * 70)
-    print("AUDITORIA DE INTEGRIDADE - PROMOCOES REPORT")
+    print("AUDITORIA DE INTEGRIDADE - PROMOÇÕES REPORT")
     print("=" * 70)
 
     # 1. ESTRUTURA DOS ARQUIVOS
@@ -69,8 +69,8 @@ def main():
         exists = os.path.exists(os.path.join(DADOS_DIR, arq))
         check("Estrutura", f"Arquivo {arq} existe", exists)
 
-    # 2. PROMOCAO INFO
-    print("\n--- 2. PROMOCAO INFO ---")
+    # 2. PROMOÇÃO INFO
+    print("\n--- 2. PROMOÇÃO INFO ---")
     campos_obrig = ["id", "titulo", "data_inicio", "data_fim", "data_sorteio", "pontos_por_numero"]
     for campo in campos_obrig:
         check("Promo", f"Campo '{campo}' presente", campo in info, f"valor: {info.get(campo, 'AUSENTE')}")
@@ -95,13 +95,13 @@ def main():
     check("KPIs", "7 linhas (6 shoppings + TOTAL)",
           len(kpis) == 7, f"linhas: {len(kpis)}")
 
-    # Valores nao negativos
+    # Valores não negativos
     for col in ["clientes_novos_cadastro", "clientes_novos_cupom", "clientes_recorrentes",
                 "clientes_totais", "cupons_lancados", "valor_total", "lojas_na_promocao"]:
         check("KPIs", f"Sem valores negativos em '{col}'",
               (kpis[col] >= 0).all(), f"min: {kpis[col].min()}")
 
-    # Consistencia novos_cupom + recorrentes = totais (por shopping)
+    # Consistência novos_cupom + recorrentes = totais (por shopping)
     kpis_shop = kpis[kpis["shopping_sigla"] != "TOTAL"]
     total_row = kpis[kpis["shopping_sigla"] == "TOTAL"].iloc[0]
 
@@ -111,14 +111,14 @@ def main():
               soma == row["clientes_totais"],
               f"soma={soma}, total={row['clientes_totais']}")
 
-    # Novos cadastro (metrica independente)
+    # Novos cadastro (métrica independente)
     check("KPIs", "Sem valores negativos em novos_cadastro",
           (kpis_shop["clientes_novos_cadastro"] >= 0).all())
     total_novos_cad_shop = kpis_shop["clientes_novos_cadastro"].sum()
     total_novos_cad = total_row["clientes_novos_cadastro"]
     check("KPIs", f"TOTAL novos_cadastro({int(total_novos_cad)}) >= soma shoppings({int(total_novos_cad_shop)})",
           total_novos_cad >= total_novos_cad_shop,
-          "total = cadastros unicos no app; soma shoppings = por primeiro cupom (pode ser menor)")
+          "total = cadastros únicos no app; soma shoppings = por primeiro cupom (pode ser menor)")
 
     # Total = soma dos shoppings (cupons)
     soma_cupons = kpis_shop["cupons_lancados"].sum()
@@ -135,9 +135,9 @@ def main():
     check("KPIs", f"TOTAL pontos({int(total_row['pontos_utilizados'])}) = soma shoppings({int(soma_pontos)})",
           total_row["pontos_utilizados"] == soma_pontos)
 
-    # Total numeros = soma dos shoppings
+    # Total números = soma dos shoppings
     soma_numeros = kpis_shop["numeros_sorte"].sum()
-    check("KPIs", f"TOTAL numeros({int(total_row['numeros_sorte'])}) = soma shoppings({int(soma_numeros)})",
+    check("KPIs", f"TOTAL números({int(total_row['numeros_sorte'])}) = soma shoppings({int(soma_numeros)})",
           total_row["numeros_sorte"] == soma_numeros)
 
     # TM cliente = valor / clientes
@@ -156,74 +156,74 @@ def main():
                   abs(row["tm_cupom"] - tm_esperado) < 0.02,
                   f"diff: R${abs(row['tm_cupom'] - tm_esperado):.2f}")
 
-    # Taxa conversao lojas
+    # Taxa conversão lojas
     for _, row in kpis_shop.iterrows():
         if row["lojas_na_promocao"] > 0:
             taxa_esp = round(row["lojas_com_cupons"] / row["lojas_na_promocao"] * 100, 1)
-            check("KPIs", f"{row['shopping_sigla']}: taxa conversao lojas {row['taxa_conversao_lojas']}% = {taxa_esp}%",
+            check("KPIs", f"{row['shopping_sigla']}: taxa conversão lojas {row['taxa_conversao_lojas']}% = {taxa_esp}%",
                   abs(row["taxa_conversao_lojas"] - taxa_esp) < 0.2)
 
-    # 4. SERIE TEMPORAL
-    print("\n--- 4. SERIE TEMPORAL ---")
+    # 4. SÉRIE TEMPORAL
+    print("\n--- 4. SÉRIE TEMPORAL ---")
     serie["data"] = pd.to_datetime(serie["data"])
     serie_total["data"] = pd.to_datetime(serie_total["data"])
 
     # 60 dias
     n_dias = serie_total["data"].nunique()
-    check("Serie", f"Quantidade de dias: {n_dias} (esperado ~60)",
+    check("Série", f"Quantidade de dias: {n_dias} (esperado ~60)",
           55 <= n_dias <= 65)
 
     # Sem dias duplicados por shopping
     dupes = serie.groupby(["data", "shopping_id"]).size()
-    check("Serie", "Sem duplicatas (data + shopping)",
-          (dupes == 1).all(), f"max ocorrencias: {dupes.max()}")
+    check("Série", "Sem duplicatas (data + shopping)",
+          (dupes == 1).all(), f"max ocorrências: {dupes.max()}")
 
     # 6 shoppings por dia
     shops_por_dia = serie.groupby("data")["shopping_id"].nunique()
-    check("Serie", f"6 shoppings por dia (min={shops_por_dia.min()}, max={shops_por_dia.max()})",
+    check("Série", f"6 shoppings por dia (min={shops_por_dia.min()}, max={shops_por_dia.max()})",
           shops_por_dia.min() >= 5)
 
-    # Serie total = soma da serie por shopping
+    # Série total = soma da série por shopping
     serie_agg = serie.groupby("data").agg(cupons=("cupons", "sum"), valor_total=("valor_total", "sum")).reset_index()
     serie_agg["data"] = pd.to_datetime(serie_agg["data"])
     merged = serie_total.merge(serie_agg, on="data", suffixes=("_total", "_soma"))
-    check("Serie", "serie_temporal_total.cupons = soma(serie_temporal.cupons)",
+    check("Série", "serie_temporal_total.cupons = soma(serie_temporal.cupons)",
           (merged["cupons_total"] == merged["cupons_soma"]).all(),
           f"diffs: {(merged['cupons_total'] != merged['cupons_soma']).sum()} dias")
 
     valor_diff = (merged["valor_total_total"] - merged["valor_total_soma"]).abs()
-    check("Serie", "serie_temporal_total.valor = soma(serie_temporal.valor)",
+    check("Série", "serie_temporal_total.valor = soma(serie_temporal.valor)",
           (valor_diff < 0.1).all(),
           f"max diff: R${valor_diff.max():.2f}")
 
     # Flag na_promocao correto
     promo_inicio = pd.to_datetime(info["data_inicio"])
-    check("Serie", "Flag na_promocao=True apenas a partir do inicio da promo",
+    check("Série", "Flag na_promocao=True apenas a partir do início da promo",
           (serie_total[serie_total["na_promocao"] == True]["data"] >= promo_inicio).all())
-    check("Serie", "Flag na_promocao=False antes do inicio da promo",
+    check("Série", "Flag na_promocao=False antes do início da promo",
           (serie_total[serie_total["na_promocao"] == False]["data"] < promo_inicio).all())
 
-    # Dia 19/03 (inicio) existe e esta marcado como na_promocao
+    # Dia 19/03 (início) existe e está marcado como na_promocao
     dia_inicio = serie_total[serie_total["data"] == promo_inicio]
-    check("Serie", f"Dia do inicio ({info['data_inicio']}) existe na serie",
+    check("Série", f"Dia do início ({info['data_inicio']}) existe na série",
           len(dia_inicio) > 0)
     if len(dia_inicio) > 0:
-        check("Serie", f"Dia do inicio marcado como na_promocao=True",
+        check("Série", f"Dia do início marcado como na_promocao=True",
               dia_inicio.iloc[0]["na_promocao"] == True)
 
-    # Cupons do dia 19/03 na serie = cupons no kpis
+    # Cupons do dia 19/03 na série = cupons no kpis
     if len(dia_inicio) > 0:
         cupons_serie_19 = int(dia_inicio.iloc[0]["cupons"])
         cupons_kpi_total = int(total_row["cupons_lancados"])
-        check("Serie", f"Cupons dia 19/03 na serie({cupons_serie_19}) = KPI total({cupons_kpi_total})",
+        check("Série", f"Cupons dia 19/03 na série({cupons_serie_19}) = KPI total({cupons_kpi_total})",
               cupons_serie_19 == cupons_kpi_total,
-              "Promocao so tem 1 dia de dados, devem ser iguais")
+              "Promoção só tem 1 dia de dados, devem ser iguais")
 
-    # Valores na serie vs KPIs (dia da promo)
+    # Valores na série vs KPIs (dia da promo)
     if len(dia_inicio) > 0:
         valor_serie_19 = round(dia_inicio.iloc[0]["valor_total"], 2)
         valor_kpi_total = total_row["valor_total"]
-        check("Serie", f"Valor dia 19/03 na serie(R${valor_serie_19:,.2f}) = KPI total(R${valor_kpi_total:,.2f})",
+        check("Série", f"Valor dia 19/03 na série(R${valor_serie_19:,.2f}) = KPI total(R${valor_kpi_total:,.2f})",
               abs(valor_serie_19 - valor_kpi_total) < 0.1)
 
     # 5. RESGATES DE PONTOS
@@ -234,11 +234,11 @@ def main():
           (resgates["promocao_id"] == info["id"]).all())
     check("Resgates", "Todos status = 'Resgatado'",
           (resgates["status"] == "Resgatado").all(),
-          f"valores unicos: {resgates['status'].unique()}")
+          f"valores únicos: {resgates['status'].unique()}")
 
-    # Shopping IDs validos
+    # Shopping IDs válidos
     valid_shops = {1, 2, 3, 4, 5, 6}
-    check("Resgates", "Todos shopping_id validos (1-6)",
+    check("Resgates", "Todos shopping_id válidos (1-6)",
           set(resgates["shopping_id"].unique()).issubset(valid_shops),
           f"valores: {sorted(resgates['shopping_id'].unique())}")
 
@@ -255,17 +255,17 @@ def main():
     # Saldo anterior > saldo posterior (pontos foram gastos)
     check("Resgates", "saldo_anterior >= saldo_posterior (pontos foram gastos)",
           (resgates["cliente_saldo_anterior"] >= resgates["cliente_saldo_posterior"]).all(),
-          f"violacoes: {(resgates['cliente_saldo_anterior'] < resgates['cliente_saldo_posterior']).sum()}")
+          f"violações: {(resgates['cliente_saldo_anterior'] < resgates['cliente_saldo_posterior']).sum()}")
 
     # Verificar: pontos_totais = saldo_anterior - saldo_posterior?
     diff_saldo = resgates["cliente_saldo_anterior"] - resgates["cliente_saldo_posterior"]
     match_pontos = (diff_saldo == resgates["pontos_totais"])
     check("Resgates", "pontos_totais = saldo_anterior - saldo_posterior",
           match_pontos.all(),
-          f"violacoes: {(~match_pontos).sum()}, exemplo: " +
+          f"violações: {(~match_pontos).sum()}, exemplo: " +
           (str(resgates[~match_pontos][["id", "pontos_totais", "cliente_saldo_anterior", "cliente_saldo_posterior"]].head(3).to_dict("records")) if (~match_pontos).any() else ""))
 
-    # Verificar numeros = ceil(pontos_totais / pontos_unitarios)
+    # Verificar números = ceil(pontos_totais / pontos_unitarios)
     import math
     numeros_esperados = resgates.apply(
         lambda r: max(1, math.ceil(r["pontos_totais"] / r["pontos_unitarios"])) if r["pontos_unitarios"] > 0 else 0, axis=1
@@ -274,20 +274,20 @@ def main():
     pct_match = match_numeros.mean() * 100
     check("Resgates", f"quantidade_numeros = ceil(pontos/100): {pct_match:.1f}% corretos",
           pct_match >= 95,
-          f"violacoes: {(~match_numeros).sum()}")
+          f"violações: {(~match_numeros).sum()}")
 
     if (~match_numeros).any():
         erros = resgates[~match_numeros][["id", "pontos_totais", "pontos_unitarios", "quantidade_numeros"]].copy()
         erros["esperado"] = numeros_esperados[~match_numeros]
-        print(f"       Exemplos de divergencia:")
+        print(f"       Exemplos de divergência:")
         for _, e in erros.head(5).iterrows():
-            print(f"         ID {int(e['id'])}: pontos={int(e['pontos_totais'])}, unit={int(e['pontos_unitarios'])}, numeros={int(e['quantidade_numeros'])}, esperado={int(e['esperado'])}")
+            print(f"         ID {int(e['id'])}: pontos={int(e['pontos_totais'])}, unit={int(e['pontos_unitarios'])}, números={int(e['quantidade_numeros'])}, esperado={int(e['esperado'])}")
 
-    # Consistencia KPIs vs resgates detalhados
+    # Consistência KPIs vs resgates detalhados
     for _, row in kpis_shop.iterrows():
         sid = row["shopping_id"]
         res_sub = resgates[resgates["shopping_id"] == sid]
-        pontos_det = int(res_sub["pontos_totais"].sum())
+        pontos_det = int(res_sub["quantidade_numeros"].sum() * 100)
         pontos_kpi = int(row["pontos_utilizados"])
         check("Resgates", f"{row['shopping_sigla']}: pontos KPI({pontos_kpi}) = detalhado({pontos_det})",
               pontos_kpi == pontos_det)
@@ -308,13 +308,13 @@ def main():
 
     total_numeros_dia = int(resg_dia["numeros_totais"].sum())
     total_numeros_kpi = int(total_row["numeros_sorte"])
-    check("Resg/Dia", f"Total numeros por dia({total_numeros_dia}) = KPI total({total_numeros_kpi})",
+    check("Resg/Dia", f"Total números por dia({total_numeros_dia}) = KPI total({total_numeros_kpi})",
           total_numeros_dia == total_numeros_kpi)
 
-    # 7. ANALISE DE ANOMALIAS
-    print("\n--- 7. ANALISE DE ANOMALIAS ---")
+    # 7. ANÁLISE DE ANOMALIAS
+    print("\n--- 7. ANÁLISE DE ANOMALIAS ---")
 
-    # Outliers na serie temporal (cupons)
+    # Outliers na série temporal (cupons)
     media_cupons = serie_total["cupons"].mean()
     std_cupons = serie_total["cupons"].std()
     outliers_cupons = serie_total[
@@ -326,14 +326,14 @@ def main():
           f"media={media_cupons:.0f}, std={std_cupons:.0f}" +
           (f", outliers: {outliers_cupons[['data','cupons']].to_dict('records')}" if len(outliers_cupons) > 0 else ""))
 
-    # Dias sem dados na serie
+    # Dias sem dados na série
     datas_serie = pd.date_range(serie_total["data"].min(), serie_total["data"].max())
     dias_faltantes = set(datas_serie) - set(serie_total["data"])
-    check("Anomalias", f"Sem dias faltantes na serie temporal: {len(dias_faltantes)} ausentes",
+    check("Anomalias", f"Sem dias faltantes na série temporal: {len(dias_faltantes)} ausentes",
           len(dias_faltantes) == 0,
           f"faltantes: {sorted(d.strftime('%Y-%m-%d') for d in dias_faltantes)}" if dias_faltantes else "")
 
-    # Concentracao de resgates em poucos clientes
+    # Concentração de resgates em poucos clientes
     if len(resgates) > 0:
         top5_cli = resgates.groupby("cliente_id")["pontos_totais"].sum().nlargest(5)
         total_pontos_all = resgates["pontos_totais"].sum()
@@ -342,12 +342,12 @@ def main():
               True,  # informativo
               f"Top 5: {dict(zip(top5_cli.index, top5_cli.values))}")
 
-    # Resgates antes do inicio da promocao?
+    # Resgates antes do início da promoção?
     resgates["data_resgate"] = pd.to_datetime(resgates["data_resgate"])
     antes_promo = resgates[resgates["data_resgate"].dt.normalize() < promo_inicio]
     check("Anomalias", f"Resgates antes da promo ({info['data_inicio']}): {len(antes_promo)}",
           len(antes_promo) == 0 or True,  # alerta se houver
-          f"Existem {len(antes_promo)} resgates antes do inicio (pode ser pre-release)" if len(antes_promo) > 0 else "Nenhum")
+          f"Existem {len(antes_promo)} resgates antes do início (pode ser pré-release)" if len(antes_promo) > 0 else "Nenhum")
 
     if len(antes_promo) > 0:
         datas_antes = antes_promo["data_resgate"].dt.date.unique()
@@ -360,11 +360,11 @@ def main():
           True,  # informativo
           f"IDs: {dict(cli_muitos)}" if len(cli_muitos) > 0 else "Nenhum")
 
-    # Resgate com muitos numeros (>50)
+    # Resgate com muitos números (>50)
     big_resg = resgates[resgates["quantidade_numeros"] > 50]
-    check("Anomalias", f"Resgates com >50 numeros da sorte: {len(big_resg)}",
+    check("Anomalias", f"Resgates com >50 números da sorte: {len(big_resg)}",
           True,  # informativo
-          f"Max: {int(resgates['quantidade_numeros'].max())} numeros (cliente {int(resgates.loc[resgates['quantidade_numeros'].idxmax(), 'cliente_id'])})")
+          f"Max: {int(resgates['quantidade_numeros'].max())} números (cliente {int(resgates.loc[resgates['quantidade_numeros'].idxmax(), 'cliente_id'])})")
 
     # ============================================================
     print("\n" + "=" * 70)
