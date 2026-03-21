@@ -1,8 +1,8 @@
 ﻿shopping_id,shopping_sigla,shopping_nome,clientes_novos_cadastro,clientes_novos_cupom,clientes_recorrentes,clientes_totais,cupons_lancados,valor_total,tm_cliente,tm_cupom,lojas_na_promocao,lojas_com_cupons,taxa_conversao_lojas,pontos_utilizados,numeros_sorte,clientes_resgataram
-1,CS,Continente Shopping,14,8,74,82,168,25612.72,312.35,152.46,304,63,20.7,72800,728,46
-2,BS,Balneario Shopping,28,0,37,37,79,28670.08,774.87,362.91,429,43,10.0,58900,589,35
-3,NK,Neumarkt Shopping,2,1,67,68,150,21817.12,320.84,145.45,231,55,23.8,82300,823,69
-4,NR,Norte Shopping,7,3,33,36,83,8900.42,247.23,107.23,186,23,12.4,137500,1375,29
-5,GS,Garten Shopping,7,1,42,43,114,11669.21,271.38,102.36,286,44,15.4,25200,252,20
-6,NS,Nacoes Shopping,5,3,18,21,42,2326.57,110.79,55.39,219,21,9.6,12800,128,21
-0,TOTAL,AJ (totais),63,16,271,285,636,98996.12,347.35,155.65,1655,249,15.0,389500,3895,206
+1,CS,Continente Shopping,41,13,152,165,337,50612.5,306.74,150.19,305,81,26.6,144100,1441,84
+2,BS,Balneario Shopping,59,2,78,80,156,42607.89,532.6,273.13,429,61,14.2,103700,1037,64
+3,NK,Neumarkt Shopping,10,1,145,146,320,46282.78,317.01,144.63,231,71,30.7,158700,1587,112
+4,NR,Norte Shopping,26,6,64,70,192,23657.36,337.96,123.22,186,33,17.7,183500,1835,57
+5,GS,Garten Shopping,11,4,77,81,209,24716.77,305.15,118.26,288,57,19.8,49600,496,45
+6,NS,Nacoes Shopping,12,5,52,57,129,16513.14,289.7,128.01,220,42,19.1,58400,584,49
+0,TOTAL,AJ (totais),163,31,568,597,1343,204390.44,342.36,152.19,1659,345,20.8,698000,6980,392
