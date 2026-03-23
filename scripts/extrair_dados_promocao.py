@@ -178,9 +178,10 @@ def main():
             SELECT shopping_id, COUNT(DISTINCT cnpj) AS total_lojas
             FROM BRONZE.BRZ_AJFANS_SHOPPING_LOJA
             WHERE cnpj IS NOT NULL AND cnpj <> ''
+              AND fidelidade = 'SIM'
             GROUP BY shopping_id
             ORDER BY shopping_id
-        """, "Contando lojas por shopping")
+        """, "Contando lojas por shopping (fidelidade = SIM)")
 
         # ============================================================
         # 5. Resgates de pontos (numeros da sorte)
