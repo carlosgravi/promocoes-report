@@ -179,10 +179,9 @@ def main():
             FROM BRONZE.BRZ_AJFANS_SHOPPING_LOJA
             WHERE cnpj IS NOT NULL AND cnpj <> ''
               AND fidelidade = 'SIM'
-              AND status = 'ATIVO'
             GROUP BY shopping_id
             ORDER BY shopping_id
-        """, "Contando lojas por shopping (ativas, fidelidade = SIM)")
+        """, "Contando lojas por shopping (fidelidade = SIM)")
 
         # ============================================================
         # 5. Resgates de pontos (numeros da sorte)
