@@ -499,6 +499,109 @@ def main():
                     df_display["Valor Total"] = df_display["Valor Total"].apply(lambda x: formatar_brl(x))
                     df_display["Ticket Médio"] = df_display["Ticket Médio"].apply(lambda x: formatar_brl(x))
                     st.dataframe(df_display, use_container_width=True, hide_index=True)
+            # ============================================================
+            # COMPARATIVO ENTRE SHOPPINGS (Top 10 de cada)
+            # ============================================================
+            st.markdown("---")
+            st.subheader("Comparativo entre Shoppings — Top 10 Lojas")
+
+            ORDEM_SHOPPING_FULL = ["CS", "BS", "NK", "NR", "GS", "NS"]
+            comp_data = []
+            for sigla in ORDEM_SHOPPING_FULL:
+                df_s = df_lojas[df_lojas["shopping_sigla"] == sigla]
+                df_t10 = df_s[df_s["ranking"] <= 10]
+                if len(df_t10) > 0:
+                    comp_data.append({
+                        "Shopping": sigla,
+                        "Valor Top 10": df_t10["valor_total"].sum(),
+                        "Cupons Top 10": int(df_t10["cupons"].sum()),
+                        "Clientes Top 10": int(df_t10["clientes"].sum()),
+                        "Ticket Médio Top 10": df_t10["valor_total"].sum() / df_t10["cupons"].sum() if df_t10["cupons"].sum() > 0 else 0,
+                        "Total Lojas": len(df_s),
+                    })
+
+            if comp_data:
+                df_comp = pd.DataFrame(comp_data)
+
+                col_g1, col_g2 = st.columns(2)
+
+                with col_g1:
+                    fig1 = go.Figure()
+                    fig1.add_trace(go.Bar(
+                        x=df_comp["Shopping"],
+                        y=df_comp["Valor Top 10"],
+                        marker_color="#3b82f6",
+                        text=[formatar_brl(v) for v in df_comp["Valor Top 10"]],
+                        textposition="outside",
+                        textfont=dict(size=10),
+                    ))
+                    fig1.update_layout(
+                        title="Valor Total — Top 10 Lojas",
+                        template="plotly_white", height=380,
+                        yaxis_title="R$", xaxis_title="",
+                    )
+                    st.plotly_chart(fig1, use_container_width=True)
+
+                with col_g2:
+                    fig2 = go.Figure()
+                    fig2.add_trace(go.Bar(
+                        x=df_comp["Shopping"],
+                        y=df_comp["Cupons Top 10"],
+                        marker_color="#10b981",
+                        text=df_comp["Cupons Top 10"],
+                        textposition="outside",
+                        textfont=dict(size=10),
+                    ))
+                    fig2.update_layout(
+                        title="Cupons Lançados — Top 10 Lojas",
+                        template="plotly_white", height=380,
+                        yaxis_title="Cupons", xaxis_title="",
+                    )
+                    st.plotly_chart(fig2, use_container_width=True)
+
+                col_g3, col_g4 = st.columns(2)
+
+                with col_g3:
+                    fig3 = go.Figure()
+                    fig3.add_trace(go.Bar(
+                        x=df_comp["Shopping"],
+                        y=df_comp["Clientes Top 10"],
+                        marker_color="#f59e0b",
+                        text=df_comp["Clientes Top 10"],
+                        textposition="outside",
+                        textfont=dict(size=10),
+                    ))
+                    fig3.update_layout(
+                        title="Clientes Únicos — Top 10 Lojas",
+                        template="plotly_white", height=380,
+                        yaxis_title="Clientes", xaxis_title="",
+                    )
+                    st.plotly_chart(fig3, use_container_width=True)
+
+                with col_g4:
+                    fig4 = go.Figure()
+                    fig4.add_trace(go.Bar(
+                        x=df_comp["Shopping"],
+                        y=df_comp["Ticket Médio Top 10"].round(2),
+                        marker_color="#8b5cf6",
+                        text=[formatar_brl(v) for v in df_comp["Ticket Médio Top 10"]],
+                        textposition="outside",
+                        textfont=dict(size=10),
+                    ))
+                    fig4.update_layout(
+                        title="Ticket Médio — Top 10 Lojas",
+                        template="plotly_white", height=380,
+                        yaxis_title="R$", xaxis_title="",
+                    )
+                    st.plotly_chart(fig4, use_container_width=True)
+
+                # Tabela comparativa
+                with st.expander("📊 Tabela comparativa"):
+                    df_comp_show = df_comp.copy()
+                    df_comp_show["Valor Top 10"] = df_comp_show["Valor Top 10"].apply(formatar_brl)
+                    df_comp_show["Ticket Médio Top 10"] = df_comp_show["Ticket Médio Top 10"].apply(lambda x: formatar_brl(x))
+                    st.dataframe(df_comp_show, use_container_width=True, hide_index=True)
+
         else:
             st.info("Dados de lojas não disponíveis. Execute a extração.")
 
