@@ -13,6 +13,11 @@ import plotly.express as px
 import plotly.graph_objects as go
 from datetime import datetime
 
+SHOPPING_FULL = {
+    1: "Continente Shopping", 2: "Balneário Shopping", 3: "Neumarkt Shopping",
+    4: "Norte Shopping", 5: "Garten Shopping", 6: "Nações Shopping",
+}
+
 st.set_page_config(
     page_title="Promoções - Report",
     page_icon="🎯",
@@ -86,6 +91,11 @@ def carregar_dados():
     except FileNotFoundError:
         dados["resgates"] = pd.DataFrame()
         dados["resgates_dia"] = pd.DataFrame()
+
+    try:
+        dados["top_lojas"] = pd.read_csv("dados/top_lojas.csv", encoding="utf-8-sig")
+    except FileNotFoundError:
+        dados["top_lojas"] = pd.DataFrame()
 
     return dados
 
@@ -324,7 +334,7 @@ def main():
     # ============================================================
     # TAB PRINCIPAL
     # ============================================================
-    tab1, tab2, tab3, tab4 = st.tabs(["📊 Report Geral", "📈 Série Temporal", "🎰 Resgates de Pontos", "🔍 Validação"])
+    tab1, tab2, tab_lojas, tab3, tab4 = st.tabs(["📊 Report Geral", "📈 Série Temporal", "🏪 Top Lojas", "🎰 Resgates de Pontos", "🔍 Validação"])
 
     with tab1:
         # KPIs destaque
@@ -422,6 +432,75 @@ def main():
             fig.add_vline(x=pd.Timestamp(info["data_inicio"]), line_dash="dash", line_color="red")
             fig.update_layout(template="plotly_white", height=350)
             st.plotly_chart(fig, use_container_width=True)
+
+    # ============================================================
+    # TAB: TOP LOJAS
+    # ============================================================
+    with tab_lojas:
+        st.subheader("🏪 Ranking de Lojas por Shopping")
+        st.caption("Top 10 lojas com maior valor de vendas durante o período da promoção")
+
+        df_lojas = dados.get("top_lojas", pd.DataFrame())
+
+        if len(df_lojas) > 0:
+            ORDEM_SHOPPING = ["CS", "BS", "NK", "NR", "GS", "NS"]
+            shopping_filter = st.selectbox(
+                "Shopping:", ["Todos"] + ORDEM_SHOPPING,
+                key="top_lojas_filter"
+            )
+
+            if shopping_filter != "Todos":
+                shoppings_show = [shopping_filter]
+            else:
+                shoppings_show = ORDEM_SHOPPING
+
+            for sigla in shoppings_show:
+                df_shop = df_lojas[df_lojas["shopping_sigla"] == sigla].copy()
+                if len(df_shop) == 0:
+                    continue
+
+                df_top10 = df_shop[df_shop["ranking"] <= 10].sort_values("ranking")
+                nome_shopping = SHOPPING_FULL.get(
+                    df_top10["shopping_id"].iloc[0] if len(df_top10) > 0 else 0,
+                    sigla
+                )
+
+                with st.expander(f"🏬 {nome_shopping} ({sigla}) — {len(df_shop)} lojas com cupons", expanded=(shopping_filter != "Todos")):
+                    # KPIs do shopping
+                    c1, c2, c3 = st.columns(3)
+                    c1.metric("Lojas com Cupons", f"{len(df_shop)}")
+                    c2.metric("Valor Total", formatar_brl(df_shop["valor_total"].sum()))
+                    c3.metric("Total Cupons", f"{int(df_shop['cupons'].sum()):,}")
+
+                    # Gráfico horizontal top 10
+                    fig = go.Figure()
+                    fig.add_trace(go.Bar(
+                        y=df_top10["loja_nome"][::-1],
+                        x=df_top10["valor_total"][::-1],
+                        orientation="h",
+                        marker_color="#3b82f6",
+                        text=[formatar_brl(v) for v in df_top10["valor_total"][::-1]],
+                        textposition="outside",
+                        textfont=dict(size=11),
+                    ))
+                    fig.update_layout(
+                        title=f"Top 10 Lojas — {sigla}",
+                        template="plotly_white",
+                        height=max(350, len(df_top10) * 40),
+                        margin=dict(l=180, r=80),
+                        xaxis_title="Valor Total (R$)",
+                        yaxis_title="",
+                    )
+                    st.plotly_chart(fig, use_container_width=True)
+
+                    # Tabela detalhada
+                    df_display = df_top10[["ranking", "loja_nome", "segmento", "cupons", "clientes", "valor_total", "ticket_medio"]].copy()
+                    df_display.columns = ["#", "Loja", "Segmento", "Cupons", "Clientes", "Valor Total", "Ticket Médio"]
+                    df_display["Valor Total"] = df_display["Valor Total"].apply(lambda x: formatar_brl(x))
+                    df_display["Ticket Médio"] = df_display["Ticket Médio"].apply(lambda x: formatar_brl(x))
+                    st.dataframe(df_display, use_container_width=True, hide_index=True)
+        else:
+            st.info("Dados de lojas não disponíveis. Execute a extração.")
 
     with tab3:
         st.subheader("Resgates de Pontos - Números da Sorte")

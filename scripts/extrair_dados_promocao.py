@@ -261,6 +261,31 @@ def main():
             """, "Buscando ultimo acesso (com shopping) dos novos cadastros")
             novos_cad_por_shopping = df_acesso.groupby("shopping_id")["cliente_id"].nunique()
 
+        # ============================================================
+        # Top lojas por shopping
+        # ============================================================
+        df_top_lojas = query_to_df(cur, f"""
+            SELECT
+                fc.shopping_id,
+                sl.nome AS loja_nome,
+                sl.segmento AS segmento,
+                COUNT(fc.id) AS cupons,
+                COUNT(DISTINCT fc.cliente_id) AS clientes,
+                SUM(fc.valor_compra) AS valor_total,
+                AVG(fc.valor_compra) AS ticket_medio
+            FROM BRONZE.BRZ_AJFANS_FIDELIDADE_CUPOM fc
+            INNER JOIN (
+                SELECT cnpj, MAX(nome) AS nome, MAX(segmento) AS segmento
+                FROM BRONZE.BRZ_AJFANS_SHOPPING_LOJA
+                WHERE cnpj IS NOT NULL AND cnpj <> ''
+                GROUP BY cnpj
+            ) sl ON sl.cnpj = fc.cnpj_loja
+            WHERE fc.status = 'Validado'
+              AND fc.data_envio BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}' AND '{data_ate} 23:59:59'
+            GROUP BY fc.shopping_id, sl.nome, sl.segmento
+            ORDER BY fc.shopping_id, valor_total DESC
+        """, "Extraindo ranking de lojas")
+
     finally:
         conn.close()
         print("\n[OK] Conexao fechada")
@@ -398,6 +423,17 @@ def main():
         df_resg_dia.columns = ["data", "resgates", "clientes_unicos", "pontos_totais", "numeros_totais"]
         df_resg_dia.to_csv(os.path.join(dados_dir, "resgates_por_dia.csv"), index=False, encoding="utf-8-sig")
         print(f"[OK] resgates_por_dia.csv: {len(df_resg_dia)} linhas")
+
+    # --- Top lojas por shopping ---
+    if len(df_top_lojas) > 0:
+        df_top_lojas["shopping_sigla"] = df_top_lojas["shopping_id"].map(SHOPPING_NAMES)
+        df_top_lojas["ticket_medio"] = df_top_lojas["ticket_medio"].round(2)
+        df_top_lojas["valor_total"] = df_top_lojas["valor_total"].round(2)
+        df_top_lojas["ranking"] = df_top_lojas.groupby("shopping_id")["valor_total"].rank(ascending=False, method="first").astype(int)
+        df_top_lojas.to_csv(os.path.join(dados_dir, "top_lojas.csv"), index=False, encoding="utf-8-sig")
+        print(f"[OK] top_lojas.csv: {len(df_top_lojas)} lojas")
+    else:
+        print("[WARN] Nenhuma loja com cupons no periodo")
 
     # --- Resumo ---
     print("\n" + "=" * 60)
