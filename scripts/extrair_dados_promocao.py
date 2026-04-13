@@ -286,6 +286,40 @@ def main():
             ORDER BY fc.shopping_id, valor_total DESC
         """, "Extraindo ranking de lojas")
 
+        # ============================================================
+        # Participacao de lojas (todas as lojas fidelidade=SIM, com ou sem cupons)
+        # ============================================================
+        df_participacao = query_to_df(cur, f"""
+            SELECT
+                sl.shopping_id,
+                sl.cnpj,
+                sl.nome AS loja_nome,
+                sl.segmento,
+                COALESCE(c.cupons, 0) AS cupons,
+                COALESCE(c.clientes, 0) AS clientes,
+                COALESCE(c.valor_total, 0) AS valor_total
+            FROM (
+                SELECT shopping_id, cnpj, MAX(nome) AS nome, MAX(segmento) AS segmento
+                FROM BRONZE.BRZ_AJFANS_SHOPPING_LOJA
+                WHERE cnpj IS NOT NULL AND cnpj <> ''
+                  AND fidelidade = 'SIM'
+                GROUP BY shopping_id, cnpj
+            ) sl
+            LEFT JOIN (
+                SELECT
+                    fc.shopping_id,
+                    fc.cnpj_loja,
+                    COUNT(fc.id) AS cupons,
+                    COUNT(DISTINCT fc.cliente_id) AS clientes,
+                    SUM(fc.valor_compra) AS valor_total
+                FROM BRONZE.BRZ_AJFANS_FIDELIDADE_CUPOM fc
+                WHERE fc.status = 'Validado'
+                  AND fc.data_envio BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}' AND '{data_ate} 23:59:59'
+                GROUP BY fc.shopping_id, fc.cnpj_loja
+            ) c ON c.shopping_id = sl.shopping_id AND c.cnpj_loja = sl.cnpj
+            ORDER BY sl.shopping_id, valor_total DESC, sl.nome
+        """, "Extraindo participacao de todas as lojas (fidelidade=SIM)")
+
     finally:
         conn.close()
         print("\n[OK] Conexao fechada")
@@ -434,6 +468,22 @@ def main():
         print(f"[OK] top_lojas.csv: {len(df_top_lojas)} lojas")
     else:
         print("[WARN] Nenhuma loja com cupons no periodo")
+
+    # --- Participacao de todas as lojas ---
+    if len(df_participacao) > 0:
+        df_participacao["shopping_sigla"] = df_participacao["shopping_id"].map(SHOPPING_NAMES)
+        df_participacao["valor_total"] = pd.to_numeric(df_participacao["valor_total"], errors="coerce").fillna(0).round(2)
+        df_participacao["cupons"] = pd.to_numeric(df_participacao["cupons"], errors="coerce").fillna(0).astype(int)
+        df_participacao["clientes"] = pd.to_numeric(df_participacao["clientes"], errors="coerce").fillna(0).astype(int)
+        df_participacao["participou"] = df_participacao["cupons"] > 0
+        # Filtra apenas shoppings validos (evita ids desconhecidos)
+        df_participacao = df_participacao[df_participacao["shopping_sigla"].notna()]
+        df_participacao.to_csv(os.path.join(dados_dir, "participacao_lojas.csv"), index=False, encoding="utf-8-sig")
+        print(f"[OK] participacao_lojas.csv: {len(df_participacao)} lojas "
+              f"({int(df_participacao['participou'].sum())} com cupons, "
+              f"{int((~df_participacao['participou']).sum())} sem cupons)")
+    else:
+        print("[WARN] Nenhuma loja cadastrada com fidelidade=SIM")
 
     # --- Resumo ---
     print("\n" + "=" * 60)

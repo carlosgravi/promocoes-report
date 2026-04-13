@@ -97,6 +97,11 @@ def carregar_dados():
     except FileNotFoundError:
         dados["top_lojas"] = pd.DataFrame()
 
+    try:
+        dados["participacao"] = pd.read_csv("dados/participacao_lojas.csv", encoding="utf-8-sig")
+    except FileNotFoundError:
+        dados["participacao"] = pd.DataFrame()
+
     return dados
 
 
@@ -334,7 +339,10 @@ def main():
     # ============================================================
     # TAB PRINCIPAL
     # ============================================================
-    tab1, tab2, tab_lojas, tab3, tab4 = st.tabs(["📊 Report Geral", "📈 Série Temporal", "🏪 Top Lojas", "🎰 Resgates de Pontos", "🔍 Validação"])
+    tab1, tab2, tab_lojas, tab_part, tab3, tab4 = st.tabs([
+        "📊 Report Geral", "📈 Série Temporal", "🏪 Top Lojas",
+        "🧾 Participação Lojas", "🎰 Resgates de Pontos", "🔍 Validação",
+    ])
 
     with tab1:
         # KPIs destaque
@@ -605,6 +613,12 @@ def main():
         else:
             st.info("Dados de lojas não disponíveis. Execute a extração.")
 
+    # ============================================================
+    # TAB: PARTICIPAÇÃO LOJAS
+    # ============================================================
+    with tab_part:
+        render_participacao_lojas(dados)
+
     with tab3:
         st.subheader("Resgates de Pontos - Números da Sorte")
         st.info(
@@ -619,6 +633,126 @@ def main():
 
     with tab4:
         render_validacao(dados, info)
+
+
+def render_participacao_lojas(dados):
+    """Renderiza participação de todas as lojas (com ou sem cupons) por shopping."""
+    st.subheader("🧾 Participação de Lojas na Promoção")
+    st.caption("Todas as lojas com fidelidade habilitada, listando cupons recebidos e valor total. "
+               "Lojas sem cupons durante o período também são exibidas.")
+
+    df_part = dados.get("participacao", pd.DataFrame())
+    if len(df_part) == 0:
+        st.info("Dados de participação indisponíveis. Execute a extração para gerar `dados/participacao_lojas.csv`.")
+        return
+
+    ORDEM_SHOPPING = ["CS", "BS", "NK", "NR", "GS", "NS"]
+
+    c_f1, c_f2 = st.columns([1, 3])
+    with c_f1:
+        shopping_filter = st.selectbox(
+            "Shopping:", ["Todos"] + ORDEM_SHOPPING,
+            key="part_lojas_shopping",
+        )
+    with c_f2:
+        status_filter = st.radio(
+            "Exibir:", ["Todas", "Apenas com cupons", "Apenas sem cupons"],
+            horizontal=True, key="part_lojas_status",
+        )
+
+    shoppings_show = ORDEM_SHOPPING if shopping_filter == "Todos" else [shopping_filter]
+
+    # Visão consolidada (cards por shopping)
+    resumo = (
+        df_part.groupby("shopping_sigla")
+        .agg(
+            total_lojas=("cnpj", "count"),
+            participaram=("participou", "sum"),
+            cupons=("cupons", "sum"),
+            valor_total=("valor_total", "sum"),
+        )
+        .reset_index()
+    )
+    resumo["nao_participaram"] = resumo["total_lojas"] - resumo["participaram"]
+    resumo["taxa"] = resumo["participaram"] / resumo["total_lojas"] * 100
+    resumo = resumo.set_index("shopping_sigla").reindex(ORDEM_SHOPPING).dropna(how="all").reset_index()
+
+    st.markdown("#### Resumo por Shopping")
+    header = "| Shopping | Total Lojas | Participaram | Não Participaram | Taxa | Cupons | Valor Total |"
+    sep = "|:---|---:|---:|---:|---:|---:|---:|"
+    rows = []
+    for _, r in resumo.iterrows():
+        rows.append(
+            f"| **{r['shopping_sigla']}** "
+            f"| {int(r['total_lojas'])} "
+            f"| {int(r['participaram'])} "
+            f"| {int(r['nao_participaram'])} "
+            f"| {r['taxa']:.1f}% "
+            f"| {int(r['cupons']):,} ".replace(",", ".") +
+            f"| {formatar_brl(r['valor_total'])} |"
+        )
+    st.markdown(header + "\n" + sep + "\n" + "\n".join(rows), unsafe_allow_html=True)
+
+    st.markdown("---")
+
+    for sigla in shoppings_show:
+        df_shop = df_part[df_part["shopping_sigla"] == sigla].copy()
+        if len(df_shop) == 0:
+            continue
+
+        total = len(df_shop)
+        com_cupom = int(df_shop["participou"].sum())
+        sem_cupom = total - com_cupom
+        valor_shop = df_shop["valor_total"].sum()
+        cupons_shop = int(df_shop["cupons"].sum())
+        nome_shopping = SHOPPING_FULL.get(int(df_shop["shopping_id"].iloc[0]), sigla)
+
+        with st.expander(
+            f"🏬 {nome_shopping} ({sigla}) — {total} lojas "
+            f"({com_cupom} com cupons, {sem_cupom} sem cupons)",
+            expanded=(shopping_filter != "Todos"),
+        ):
+            c1, c2, c3, c4 = st.columns(4)
+            c1.metric("Total de Lojas", f"{total}")
+            c2.metric("Participaram", f"{com_cupom}",
+                      delta=f"{com_cupom/total*100:.1f}%" if total > 0 else None,
+                      delta_color="off")
+            c3.metric("Não Participaram", f"{sem_cupom}",
+                      delta=f"{sem_cupom/total*100:.1f}%" if total > 0 else None,
+                      delta_color="off")
+            c4.metric("Valor Total", formatar_brl(valor_shop),
+                      delta=f"{cupons_shop:,} cupons".replace(",", "."),
+                      delta_color="off")
+
+            # Filtrar por status
+            if status_filter == "Apenas com cupons":
+                df_view = df_shop[df_shop["participou"]]
+            elif status_filter == "Apenas sem cupons":
+                df_view = df_shop[~df_shop["participou"]]
+            else:
+                df_view = df_shop
+
+            # Ordenar: participantes por valor desc; não participantes por nome
+            df_view = df_view.sort_values(
+                ["participou", "valor_total", "loja_nome"],
+                ascending=[False, False, True],
+            )
+
+            # Tabela combinada
+            df_display = df_view[["loja_nome", "segmento", "cupons", "clientes", "valor_total", "participou"]].copy()
+            df_display["Status"] = df_display["participou"].map({True: "✅ Participou", False: "⚠️ Sem cupons"})
+            df_display["Valor Total"] = df_display["valor_total"].apply(formatar_brl)
+            df_display = df_display[["loja_nome", "segmento", "Status", "cupons", "clientes", "Valor Total"]]
+            df_display.columns = ["Loja", "Segmento", "Status", "Cupons", "Clientes", "Valor Total"]
+            st.dataframe(df_display, use_container_width=True, hide_index=True)
+
+            # Destaque lojas sem cupons
+            if status_filter != "Apenas com cupons" and sem_cupom > 0:
+                df_sem = df_shop[~df_shop["participou"]].sort_values("loja_nome")
+                with st.expander(f"⚠️ {sem_cupom} lojas sem cupons em {sigla}"):
+                    df_sem_show = df_sem[["loja_nome", "segmento"]].copy()
+                    df_sem_show.columns = ["Loja", "Segmento"]
+                    st.dataframe(df_sem_show, use_container_width=True, hide_index=True)
 
 
 def render_validacao(dados, info):
