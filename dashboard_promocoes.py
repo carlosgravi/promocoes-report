@@ -638,13 +638,34 @@ def main():
 def render_participacao_lojas(dados):
     """Renderiza participação de todas as lojas (com ou sem cupons) por shopping."""
     st.subheader("🧾 Participação de Lojas na Promoção")
-    st.caption("Todas as lojas com fidelidade habilitada, listando cupons recebidos e valor total. "
-               "Lojas sem cupons durante o período também são exibidas.")
+    st.caption("Lojas com fidelidade habilitada: ativas no momento da extração, "
+               "as que lançaram cupons na promoção e as que foram inativadas durante o período.")
 
     df_part = dados.get("participacao", pd.DataFrame())
     if len(df_part) == 0:
         st.info("Dados de participação indisponíveis. Execute a extração para gerar `dados/participacao_lojas.csv`.")
         return
+
+    # Garantir colunas opcionais (compatibilidade com CSVs antigos)
+    if "status_atual" not in df_part.columns:
+        df_part["status_atual"] = "ATIVO"
+    if "inativada_na_promo" not in df_part.columns:
+        df_part["inativada_na_promo"] = False
+    if "data_inativacao" not in df_part.columns:
+        df_part["data_inativacao"] = ""
+    if "last_time" not in df_part.columns:
+        df_part["last_time"] = ""
+
+    # Aviso global para inativadas
+    inativadas_total = int(df_part["inativada_na_promo"].sum())
+    if inativadas_total > 0:
+        inat_com_cupom = int((df_part["inativada_na_promo"] & df_part["participou"]).sum())
+        inat_sem_cupom = inativadas_total - inat_com_cupom
+        st.warning(
+            f"⚠️ **{inativadas_total} lojas foram inativadas durante o período da promoção** "
+            f"({inat_com_cupom} chegaram a lançar cupons, {inat_sem_cupom} não lançaram). "
+            f"Elas estão sinalizadas como ⚠️ *Inativada na promo* nas tabelas abaixo."
+        )
 
     ORDEM_SHOPPING = ["CS", "BS", "NK", "NR", "GS", "NS"]
 
@@ -724,6 +745,10 @@ def render_participacao_lojas(dados):
                       delta=f"{cupons_shop:,} cupons".replace(",", "."),
                       delta_color="off")
 
+            inativadas_shop = int(df_shop["inativada_na_promo"].sum())
+            if inativadas_shop > 0:
+                st.caption(f"⚠️ {inativadas_shop} loja(s) inativada(s) durante a promoção em {sigla}.")
+
             # Filtrar por status
             if status_filter == "Apenas com cupons":
                 df_view = df_shop[df_shop["participou"]]
@@ -739,19 +764,27 @@ def render_participacao_lojas(dados):
             )
 
             # Tabela combinada
-            df_display = df_view[["loja_nome", "segmento", "cupons", "clientes", "valor_total", "participou"]].copy()
-            df_display["Status"] = df_display["participou"].map({True: "✅ Participou", False: "⚠️ Sem cupons"})
+            def _status_label(row):
+                if row["inativada_na_promo"]:
+                    return "⚠️ Inativada na promo"
+                if row["participou"]:
+                    return "✅ Participou"
+                return "—  Sem cupons"
+
+            df_display = df_view.copy()
+            df_display["Status"] = df_display.apply(_status_label, axis=1)
             df_display["Valor Total"] = df_display["valor_total"].apply(formatar_brl)
-            df_display = df_display[["loja_nome", "segmento", "Status", "cupons", "clientes", "Valor Total"]]
-            df_display.columns = ["Loja", "Segmento", "Status", "Cupons", "Clientes", "Valor Total"]
+            df_display["Inativada em"] = df_display["data_inativacao"].fillna("").astype(str)
+            df_display = df_display[["loja_nome", "segmento", "Status", "cupons", "clientes", "Valor Total", "Inativada em"]]
+            df_display.columns = ["Loja", "Segmento", "Status", "Cupons", "Clientes", "Valor Total", "Inativada em"]
             st.dataframe(df_display, use_container_width=True, hide_index=True)
 
             # Destaque lojas sem cupons
             if status_filter != "Apenas com cupons" and sem_cupom > 0:
                 df_sem = df_shop[~df_shop["participou"]].sort_values("loja_nome")
                 with st.expander(f"⚠️ {sem_cupom} lojas sem cupons em {sigla}"):
-                    df_sem_show = df_sem[["loja_nome", "segmento"]].copy()
-                    df_sem_show.columns = ["Loja", "Segmento"]
+                    df_sem_show = df_sem[["loja_nome", "segmento", "status_atual", "data_inativacao"]].copy()
+                    df_sem_show.columns = ["Loja", "Segmento", "Status Atual", "Inativada em"]
                     st.dataframe(df_sem_show, use_container_width=True, hide_index=True)
 
 

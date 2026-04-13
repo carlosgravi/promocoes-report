@@ -172,17 +172,42 @@ def main():
         df_primeiro["primeiro_cupom"] = pd.to_datetime(df_primeiro["primeiro_cupom"]).dt.tz_localize(None)
 
         # ============================================================
-        # 4. Lojas por shopping (ativas com fidelidade)
+        # 4. Lojas por shopping (participantes da promocao)
+        #    Criterio: fidelidade=SIM E (
+        #        status=ATIVO
+        #        OU lancou cupom na promo (inativada depois de participar)
+        #        OU data_inativacao cai no periodo
+        #        OU time (ultima modificacao no BD de origem) cai no periodo
+        #    )
         # ============================================================
-        df_lojas = query_to_df(cur, """
+        df_lojas = query_to_df(cur, f"""
             SELECT shopping_id, COUNT(DISTINCT cnpj) AS total_lojas
-            FROM BRONZE.BRZ_AJFANS_SHOPPING_LOJA
-            WHERE cnpj IS NOT NULL AND cnpj <> ''
-              AND fidelidade = 'SIM'
-              AND status = 'ATIVO'
+            FROM (
+                SELECT sl.shopping_id, sl.cnpj,
+                       MAX(CASE WHEN sl.status='ATIVO' THEN 1 ELSE 0 END) AS is_ativo,
+                       MAX(sl.time) AS last_time,
+                       MAX(CASE WHEN sl.status='INATIVO' THEN sl.data_inativacao END) AS data_inat
+                FROM BRONZE.BRZ_AJFANS_SHOPPING_LOJA sl
+                WHERE sl.cnpj IS NOT NULL AND sl.cnpj <> ''
+                  AND sl.fidelidade = 'SIM'
+                GROUP BY sl.shopping_id, sl.cnpj
+            ) t
+            WHERE t.is_ativo = 1
+               OR EXISTS (
+                   SELECT 1 FROM BRONZE.BRZ_AJFANS_FIDELIDADE_CUPOM fc
+                   WHERE fc.cnpj_loja = t.cnpj
+                     AND fc.shopping_id = t.shopping_id
+                     AND fc.status = 'Validado'
+                     AND fc.data_envio BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}'
+                                          AND '{data_ate} 23:59:59'
+               )
+               OR t.data_inat BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}'
+                                 AND '{data_ate} 23:59:59'
+               OR t.last_time BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}'
+                                 AND '{data_ate} 23:59:59'
             GROUP BY shopping_id
             ORDER BY shopping_id
-        """, "Contando lojas por shopping (fidelidade=SIM + status=ATIVO)")
+        """, "Contando lojas participantes (ATIVO / cupons / inativada na promo)")
 
         # ============================================================
         # 5. Resgates de pontos (numeros da sorte)
@@ -288,26 +313,26 @@ def main():
         """, "Extraindo ranking de lojas")
 
         # ============================================================
-        # Participacao de lojas (todas as lojas fidelidade=SIM, com ou sem cupons)
+        # Participacao de lojas na promocao.
+        # Inclui lojas fidelidade=SIM que:
+        #   - estao com status=ATIVO (participantes do universo atual)
+        #   - OU tiveram cupons na promocao (inativadas depois de participar)
+        # Coluna status_atual distingue os dois casos.
         # ============================================================
         df_participacao = query_to_df(cur, f"""
-            SELECT
-                sl.shopping_id,
-                sl.cnpj,
-                sl.nome AS loja_nome,
-                sl.segmento,
-                COALESCE(c.cupons, 0) AS cupons,
-                COALESCE(c.clientes, 0) AS clientes,
-                COALESCE(c.valor_total, 0) AS valor_total
-            FROM (
-                SELECT shopping_id, cnpj, MAX(nome) AS nome, MAX(segmento) AS segmento
+            WITH lojas_fid AS (
+                SELECT shopping_id, cnpj,
+                       MAX(nome) AS nome,
+                       MAX(segmento) AS segmento,
+                       MAX(CASE WHEN status = 'ATIVO' THEN 1 ELSE 0 END) AS is_ativo,
+                       MAX(time) AS last_time,
+                       MAX(CASE WHEN status = 'INATIVO' THEN data_inativacao END) AS data_inativacao
                 FROM BRONZE.BRZ_AJFANS_SHOPPING_LOJA
                 WHERE cnpj IS NOT NULL AND cnpj <> ''
                   AND fidelidade = 'SIM'
-                  AND status = 'ATIVO'
                 GROUP BY shopping_id, cnpj
-            ) sl
-            LEFT JOIN (
+            ),
+            cupons_periodo AS (
                 SELECT
                     fc.shopping_id,
                     fc.cnpj_loja,
@@ -316,11 +341,32 @@ def main():
                     SUM(fc.valor_compra) AS valor_total
                 FROM BRONZE.BRZ_AJFANS_FIDELIDADE_CUPOM fc
                 WHERE fc.status = 'Validado'
-                  AND fc.data_envio BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}' AND '{data_ate} 23:59:59'
+                  AND fc.data_envio BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}'
+                                       AND '{data_ate} 23:59:59'
                 GROUP BY fc.shopping_id, fc.cnpj_loja
-            ) c ON c.shopping_id = sl.shopping_id AND c.cnpj_loja = sl.cnpj
-            ORDER BY sl.shopping_id, valor_total DESC, sl.nome
-        """, "Extraindo participacao de todas as lojas (fidelidade=SIM)")
+            )
+            SELECT
+                lf.shopping_id,
+                lf.cnpj,
+                lf.nome AS loja_nome,
+                lf.segmento,
+                CASE WHEN lf.is_ativo = 1 THEN 'ATIVO' ELSE 'INATIVO' END AS status_atual,
+                lf.last_time,
+                lf.data_inativacao,
+                COALESCE(cp.cupons, 0) AS cupons,
+                COALESCE(cp.clientes, 0) AS clientes,
+                COALESCE(cp.valor_total, 0) AS valor_total
+            FROM lojas_fid lf
+            LEFT JOIN cupons_periodo cp
+              ON cp.shopping_id = lf.shopping_id AND cp.cnpj_loja = lf.cnpj
+            WHERE lf.is_ativo = 1
+               OR COALESCE(cp.cupons, 0) > 0
+               OR lf.data_inativacao BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}'
+                                         AND '{data_ate} 23:59:59'
+               OR lf.last_time BETWEEN '{promo_inicio.strftime('%Y-%m-%d')}'
+                                  AND '{data_ate} 23:59:59'
+            ORDER BY lf.shopping_id, valor_total DESC, lf.nome
+        """, "Extraindo participacao (ATIVO / com cupons / inativada durante promo)")
 
     finally:
         conn.close()
@@ -478,12 +524,42 @@ def main():
         df_participacao["cupons"] = pd.to_numeric(df_participacao["cupons"], errors="coerce").fillna(0).astype(int)
         df_participacao["clientes"] = pd.to_numeric(df_participacao["clientes"], errors="coerce").fillna(0).astype(int)
         df_participacao["participou"] = df_participacao["cupons"] > 0
+
+        # Normaliza timestamps
+        df_participacao["last_time"] = pd.to_datetime(df_participacao["last_time"], errors="coerce").dt.tz_localize(None)
+        df_participacao["data_inativacao"] = pd.to_datetime(df_participacao["data_inativacao"], errors="coerce").dt.tz_localize(None)
+
+        # Flag: loja foi inativada durante a promocao?
+        # Criterio: status=INATIVO E (teve cupons OU data_inativacao no periodo
+        # OU last_time do BD de origem no periodo).
+        inicio_ts = promo_inicio
+        fim_ts = pd.to_datetime(data_ate) + pd.Timedelta(hours=23, minutes=59, seconds=59)
+
+        is_inativo = df_participacao["status_atual"] == "INATIVO"
+        inat_periodo = df_participacao["data_inativacao"].between(inicio_ts, fim_ts)
+        time_periodo = df_participacao["last_time"].between(inicio_ts, fim_ts)
+
+        df_participacao["inativada_na_promo"] = is_inativo & (
+            df_participacao["participou"] | inat_periodo | time_periodo
+        )
+
         # Filtra apenas shoppings validos (evita ids desconhecidos)
         df_participacao = df_participacao[df_participacao["shopping_sigla"].notna()]
+
+        # Converte timestamps para string antes de salvar
+        df_participacao["last_time"] = df_participacao["last_time"].dt.strftime("%Y-%m-%d %H:%M:%S").fillna("")
+        df_participacao["data_inativacao"] = df_participacao["data_inativacao"].dt.strftime("%Y-%m-%d").fillna("")
+
         df_participacao.to_csv(os.path.join(dados_dir, "participacao_lojas.csv"), index=False, encoding="utf-8-sig")
-        print(f"[OK] participacao_lojas.csv: {len(df_participacao)} lojas "
-              f"({int(df_participacao['participou'].sum())} com cupons, "
-              f"{int((~df_participacao['participou']).sum())} sem cupons)")
+        total = len(df_participacao)
+        com_cupom = int(df_participacao["participou"].sum())
+        inativadas = int(df_participacao["inativada_na_promo"].sum())
+        inativadas_com_cupom = int((df_participacao["inativada_na_promo"] & df_participacao["participou"]).sum())
+        inativadas_sem_cupom = inativadas - inativadas_com_cupom
+        print(f"[OK] participacao_lojas.csv: {total} lojas "
+              f"({com_cupom} com cupons, {total - com_cupom} sem cupons)")
+        print(f"     -> Inativadas durante a promocao: {inativadas} "
+              f"({inativadas_com_cupom} com cupons, {inativadas_sem_cupom} sem cupons)")
     else:
         print("[WARN] Nenhuma loja cadastrada com fidelidade=SIM")
 
