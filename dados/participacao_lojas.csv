@@ -1,6 +1,6 @@
 ﻿shopping_id,cnpj,loja_nome,segmento,cupons,clientes,valor_total,shopping_sigla,participou
 1,92754738021755,Renner,Moda,413,319,111862.39,CS,True
-1,59546515007490,Nike Unite,Moda,168,135,73569.5,CS,True
+1,59546515007490,Nike Unite,Esportes,168,135,73569.5,CS,True
 1,84453844017587,Vivara,Joalheria,26,23,65858.33,CS,True
 1,45242914028450,C&A,Moda,188,159,48207.32,CS,True
 1,00776574160781,Lojas Americanas,Eletrodomésticos,536,337,46532.98,CS,True
@@ -10,7 +10,7 @@
 1,33200056014107,Riachuelo,Moda,168,141,37000.38,CS,True
 1,34912793000480,Empório Du Homem,Moda,41,33,35933.36,CS,True
 1,02455036001590,Samsung,Eletrônicos,8,4,32903.0,CS,True
-1,28672652000191,Maze Vale Comercio LTDA,Moda,37,30,29221.0,CS,True
+1,28672652000191,Maze,Calçados,37,30,29221.0,CS,True
 1,02558157078005,Vivo,Telefonia,5,4,25674.0,CS,True
 1,47960950088460,Magazine Luiza,Eletrodomésticos,25,11,25173.3,CS,True
 1,92665611036368,Panvel Farmácias,Farmácias,259,203,23984.86,CS,True
@@ -51,7 +51,7 @@
 1,11950487018137,Bacio di Latte,Gastronomia,164,110,9419.52,CS,True
 1,56261957000146,Monviso,Ótica,5,5,9287.0,CS,True
 1,83729004012300,Damyller,Moda,13,13,9212.4,CS,True
-1,58731662012632,Ri Happy Baby,Infantil,50,42,9035.71,CS,True
+1,58731662012632,Ri Happy,Infantil,50,42,9035.71,CS,True
 1,17261661015529,Outback Steakhouse,Gastronomia,39,35,8304.41,CS,True
 1,47100110014300,Brooksfield,Moda,6,6,8054.94,CS,True
 1,24548025000192,Spoleto,Gastronomia,149,100,7623.29,CS,True
@@ -64,19 +64,19 @@
 1,28030178000102,Constance,Calçados,23,21,6570.3,CS,True
 1,34593611000102,Cartes - Cozinha do Mundo,Gastronomia,97,64,6503.11,CS,True
 1,09611669030859,FARM Rio,Moda,17,15,6495.63,CS,True
-1,01687411000836,Chuá Brand,Moda Feminina,6,6,6366.9,CS,True
+1,01687411000836,Chuá Brand,Moda,6,6,6366.9,CS,True
 1,46708841018449,Polo Wear,Moda,39,35,6243.29,CS,True
 1,13341740000303,Vicio DiPrata,Joalheria,23,21,6202.3,CS,True
 1,10872187000924,Ophicina,Moda,9,9,6077.94,CS,True
 1,41895821000110,Giraffas,Gastronomia,117,75,6051.23,CS,True
 1,34438969000403,Arquipélago  Sushi,Gastronomia,18,14,6019.98,CS,True
-1,57637136000124,Hefesto Acessorios,Presentes e Acessórios,27,15,6013.87,CS,True
+1,57637136000124,Acium,Joalheria,27,15,6013.87,CS,True
 1,11377588002671,Burger King,Gastronomia,108,81,5919.95,CS,True
 1,51383076000184,Bagaggio,Presentes e Acessórios,12,11,5840.8,CS,True
 1,04570373000159,Mini Kalzone,Gastronomia,225,157,5664.8,CS,True
 1,33236254000162,Lupo,Moda,29,27,5548.32,CS,True
 1,09652820001538,Cinépolis,Lazer,69,57,5465.0,CS,True
-1,55605790000120,Anacapri,Lazer,15,10,5215.47,CS,True
+1,55605790000120,Anacapri,Calçados,15,10,5215.47,CS,True
 1,63144764000170,WePink,Beleza e Bem-estar,35,31,4988.85,CS,True
 1,62550790000136,Narbona Brasil,Gastronomia,14,14,4912.08,CS,True
 1,29263804000165,Camarão Express,Gastronomia,48,19,4898.11,CS,True
@@ -101,22 +101,21 @@
 1,40573488000160,Griletto,Gastronomia,71,46,2896.62,CS,True
 1,59452772000107,New Era,Moda,10,7,2738.0,CS,True
 1,60854024000130,Mr. Cat,Calçados,6,5,2698.8,CS,True
-1,15378735000120,Bob's Sorvete - Quiosque,Gastronomia,96,71,2655.3,CS,True
+1,15378735000120,Bob's,Gastronomia,96,71,2655.3,CS,True
 1,61010243000103,Tomato,Gastronomia,41,33,2630.99,CS,True
 1,37096024000104,Lez a Lez,Moda,5,4,2448.65,CS,True
 1,12423925000205,Continente Shopping - Estacionamento,Serviços,85,76,2277.0,CS,True
 1,61903520000107,It Cell,Eletrônicos,10,9,2058.91,CS,True
 1,33865910000196,Mr. Cheff,Gastronomia,52,27,1861.74,CS,True
 1,40166214000157,Café Cultura,Gastronomia,45,36,1720.42,CS,True
-1,56294063000152,Provin Joias,Não informado,8,8,1712.0,CS,True
+1,56294063000152,Provin Joias,Joalheria,8,8,1712.0,CS,True
 1,56905856000160,Riviera Café,Gastronomia,33,19,1689.0,CS,True
 1,08146732001178,Hot Dog Du Piru,Gastronomia,46,33,1652.75,CS,True
 1,26329064000205,Quebra Gelo,Presentes e Acessórios,7,7,1640.0,CS,True
 1,34277282000190,Floripratas,Presentes e Acessórios,12,11,1591.75,CS,True
-1,20239819000113,Morana,Presentes e Acessórios,14,14,1573.3,CS,True
 1,64028666000130,AstroBox,Gastronomia,31,28,1568.03,CS,True
 1,42012629000282,Outlet Suplementos,Esportes,8,7,1529.88,CS,True
-1,41499548000105,Borelli Gelato,Gastronomia - Sorvetes,36,30,1490.0,CS,True
+1,41499548000105,Borelli Gelato,Gastronomia,36,30,1490.0,CS,True
 1,01512104000148,L'OCCITANE AU BRESIL,Beleza e Bem-estar,5,5,1489.6,CS,True
 1,51849217000101,Subway,Gastronomia,39,28,1484.8,CS,True
 1,51450284000159,Goldko,Gastronomia,11,11,1423.12,CS,True
@@ -125,15 +124,15 @@
 1,53259666000125,Chiquinho Sorvetes,Gastronomia - Sorvetes,46,37,1062.0,CS,True
 1,62718378000182,Sandaliaria,Calçados,5,5,1051.19,CS,True
 1,23448147000144,Mr Trend,Ótica,3,3,1009.0,CS,True
-1,58356059000105,Frank d'Ferran Cabelereiros,Salão de Beleza | Barbearia,3,3,952.0,CS,True
+1,58356059000105,Frank d'Ferran Cabeleireiros,Salão de Beleza | Barbearia,3,3,952.0,CS,True
 1,58891504011910,KFC,Gastronomia,17,17,877.5,CS,True
 1,57150568000106,Lilica & Tigor,Infantil,4,2,824.85,CS,True
 1,59720070000167,World Cookies,Gastronomia,40,14,808.5,CS,True
-1,61793720000227,Ótica Oculum,Ótica,1,1,790.0,CS,True
+1,61793720000227,Oculum Ótica,Ótica,1,1,790.0,CS,True
 1,27877999000108,EVOLUCELL CELULARES,Telefonia,2,1,675.0,CS,True
 1,47821356000150,Melissa,Calçados,3,3,609.5,CS,True
 1,31324392002200,Botoclinic,Beleza e Bem-estar,1,1,599.0,CS,True
-1,61543434000122,Homem do Sapato,Moda,1,1,599.0,CS,True
+1,61543434000122,Homem do Sapato,Calçados,1,1,599.0,CS,True
 1,54248054000108,Milky Moo,Gastronomia,17,15,594.0,CS,True
 1,60056258000131,Smartcase,Eletrônicos,3,3,458.8,CS,True
 1,01101271000104,Lanzara,Joalheria,1,1,375.0,CS,True
@@ -141,16 +140,13 @@
 1,27996249000155,Fini,Gastronomia,5,4,254.2,CS,True
 1,52003898001046,Figueira Store,Esportes,1,1,199.99,CS,True
 1,64630289000105,Mate Chique,Outros,2,2,155.8,CS,True
-1,48577301000109,WOW Park,Lazer,4,4,115.8,CS,True
+1,48577301000109,Vila Trampolim,Lazer,4,4,115.8,CS,True
 1,46057902000327,BRANDO BIKES,Esportes,1,1,1.35,CS,True
-1,59350220000198,.,Beleza e Bem-estar,0,0,0.0,CS,False
-1,52438155000299,.,Gastronomia,0,0,0.0,CS,False
 1,37581110000102,ALLMINI (em breve),Presentes e Acessórios,0,0,0.0,CS,False
 1,50878192000101,Antonio's Boliche,Lazer,0,0,0.0,CS,False
 1,76381169000443,CVC,Serviços,0,0,0.0,CS,False
-1,62405757000112,Chilli Beans,Ótica,0,0,0.0,CS,False
 1,15833712000169,Chilli Beans,Ótica,0,0,0.0,CS,False
-1,62405753000134,Chilli Beans Ótica,Ótica,0,0,0.0,CS,False
+1,48586755000146,Colchões Ortobom,Casa e Decoração,0,0,0.0,CS,False
 1,52580104000205,Divert Park,Lazer,0,0,0.0,CS,False
 1,26585335000102,Drive Kids,Lazer,0,0,0.0,CS,False
 1,63712614000116,Eleve by 26fit,Esportes,0,0,0.0,CS,False
@@ -158,16 +154,12 @@
 1,08845676044560,Espaço Laser,Beleza e Bem-estar,0,0,0.0,CS,False
 1,26137868000121,Estacionamento,Serviços,0,0,0.0,CS,False
 1,21380105000193,Havanna Heladeria,Gastronomia,0,0,0.0,CS,False
-1,17795974000101,JBay,Moda,0,0,0.0,CS,False
 1,04657129002171,JCanedo,Moda,0,0,0.0,CS,False
 1,31911762000335,Joker Socks,Presentes e Acessórios,0,0,0.0,CS,False
 1,50721523000103,LENTES ACUVUE,Ótica,0,0,0.0,CS,False
 1,43849161000167,Laundrexpress (em breve),Serviços,0,0,0.0,CS,False
-1,07719288000106,MAZE,Calçados,0,0,0.0,CS,False
 1,02455036009494,Motorola,Telefonia,0,0,0.0,CS,False
 1,44453337000120,Nutty Bavarian,Gastronomia,0,0,0.0,CS,False
-1,46424765000150,OJO BY MR. RAY,Ótica,0,0,0.0,CS,False
-1,48586755000146,ORTOBOM,Casa e Decoração,0,0,0.0,CS,False
 1,51537088000116,PIPOCA AMERICANA,Gastronomia,0,0,0.0,CS,False
 1,39362798000238,Suíça Relógios,Serviços,0,0,0.0,CS,False
 1,02255187000108,Unifique,Telefonia,0,0,0.0,CS,False
@@ -183,19 +175,19 @@
 2,11516257004961,Lofty style,Moda Feminina,35,32,32606.6,BS,True
 2,47100110024888,Brooksfield,Moda,12,12,28370.24,BS,True
 2,10346495000169,Cacau Show,Gastronomia,105,87,27482.6,BS,True
-2,04692027003673,Oakley,Ótica,12,11,27205.6,BS,True
+2,04692027003673,Oakley,Moda,12,11,27205.6,BS,True
 2,88936323001961,Coliseu,Joalheria,6,5,26607.0,BS,True
 2,23103714000392,Track&Field,Moda,43,35,26463.54,BS,True
 2,03733595004412,Superlegal Brinquedos,Infantil,118,99,25184.3,BS,True
 2,09017661001338,Paula Torres,Calçados Femininos,9,9,24919.31,BS,True
-2,13257648009901,Rayban,Ótica,14,13,24810.5,BS,True
+2,13257648009901,Ray-Ban,Ótica,14,13,24810.5,BS,True
 2,05570154001295,Adidas,Esportes,29,25,24176.05,BS,True
 2,05570154001708,Adidas Originals,Moda,29,27,23870.7,BS,True
 2,04756550000196,The North Face,Moda,14,7,23633.0,BS,True
 2,79065181001409,Livrarias Catarinense,Livrarias,196,159,22869.59,BS,True
 2,57673178000110,Zeiss Vision Center,Ótica,4,4,20325.0,BS,True
 2,14012554006588,Dress To,Moda Feminina,14,14,19786.0,BS,True
-2,32143917000131,Magic Feet,Moda,19,16,19773.86,BS,True
+2,32143917000131,Magic Feet,Infantil,19,16,19773.86,BS,True
 2,02455036001752,Samsung,Eletrônicos,2,2,19574.0,BS,True
 2,36331349000153,Arezzo,Calçados Femininos,34,32,19240.85,BS,True
 2,48729832000170,Kopenhagen,Gastronomia,81,57,18262.22,BS,True
@@ -208,37 +200,37 @@
 2,61747426000106,Hope,Moda,39,37,14882.29,BS,True
 2,14959293000143,Dolce & Gabbana,Moda,2,2,14809.0,BS,True
 2,08743025007957,Granado,Beleza e Bem-estar,59,45,14646.18,BS,True
-2,33200056057680,Carter´s,Infantil,33,30,14639.41,BS,True
+2,33200056057680,Carter's,Infantil,33,30,14639.41,BS,True
 2,33164270000197,Miniso,Presentes e Acessórios,101,35,14441.67,BS,True
 2,75293662001763,Altenburg,Casa e Decoração,6,6,14353.56,BS,True
 2,58731662017278,Ri Happy,Infantil,64,54,13823.82,BS,True
 2,13783221018920,Madero,Gastronomia,72,60,13073.44,BS,True
 2,24991405000105,Levi's,Moda,21,21,12959.63,BS,True
 2,89237911017116,iPlace Mobile,Eletrônicos,9,9,12742.97,BS,True
-2,57621054003530,Boss,Moda,10,7,12577.0,BS,True
+2,57621054003530,BOSS,Moda,10,7,12577.0,BS,True
 2,27769320000167,Clifield,Moda,16,14,12298.9,BS,True
 2,47960950125331,Magazine Luiza,Eletrodomésticos,6,6,12294.88,BS,True
 2,78876950003006,Hering Store,Moda,37,35,11876.0,BS,True
 2,34509029000115,Lupo,Moda,40,38,11789.5,BS,True
 2,09611669014900,Farm,Moda,14,12,11296.09,BS,True
-2,49669856026703,John John Denim,Moda,15,10,11290.64,BS,True
+2,49669856026703,John John,Moda,15,10,11290.64,BS,True
 2,00776574161087,Lojas Americanas,Supermercado,180,109,11285.95,BS,True
 2,06159920000214,Lua Luá,Moda,24,19,10721.3,BS,True
 2,13257648014492,Grandvision by Fototica,Ótica,9,4,10704.4,BS,True
 2,03002339009090,Camicado,Casa e Decoração,39,34,10316.78,BS,True
 2,11950487018218,Bacio di Latte,Gastronomia,139,90,10267.22,BS,True
 2,09148568000129,Schutz,Calçados,11,11,9427.0,BS,True
-2,52194320000638,Nba Store Balneario Camboriu,Moda,13,12,8933.91,BS,True
+2,52194320000638,NBA Store,Moda,13,12,8933.91,BS,True
 2,55591589000131,Casa Bauducco,Gastronomia,78,57,8904.17,BS,True
 2,24276833004305,Natura,Beleza e Bem-estar,48,43,8781.55,BS,True
 2,17574231003550,Youcom,Moda,25,24,8195.07,BS,True
 2,41640059000121,Vans,Calçados,10,9,8029.83,BS,True
 2,34587970000157,Adcos,Beleza e Bem-estar,19,18,7671.1,BS,True
 2,46088254000104,Artwalk,Calçados,8,8,7583.96,BS,True
-2,13393158004299,MeLinda,Calçados Femininos,42,40,7548.31,BS,True
+2,13393158004299,MeLinda,Beleza e Bem-estar,42,40,7548.31,BS,True
 2,80973795000153,O Boticário,Beleza e Bem-estar,58,53,7236.74,BS,True
 2,02421421009500,TIM,Telefonia,2,1,7081.84,BS,True
-2,09054385033239,Vr Collezioni,Moda,2,2,6940.0,BS,True
+2,09054385033239,VR Collezioni,Moda,2,2,6940.0,BS,True
 2,30644994000140,Óticas Carol,Ótica,5,4,6395.0,BS,True
 2,23417670000103,Luz da Lua,Calçados,9,7,6373.1,BS,True
 2,09048502000167,Sandra Duwe,Joalheria,2,2,6283.0,BS,True
@@ -287,21 +279,20 @@
 2,52203144000149,Usaflex,Calçados,5,5,2157.96,BS,True
 2,55604646000170,Café Cultura,Gastronomia,41,30,2146.02,BS,True
 2,16945787004353,Souq,Moda Feminina,3,3,2043.6,BS,True
-2,49961545006518,Paquetá Esportes,Esportes,6,5,2034.91,BS,True
+2,49961545006518,Paquetá Esportes,Calçados,6,5,2034.91,BS,True
 2,21345888000174,Swarovski,Joalheria,2,2,1908.0,BS,True
 2,46208235000174,Mini Kalzone,Gastronomia,85,52,1849.1,BS,True
 2,02876218000563,Pizza Hut,Gastronomia,28,22,1803.89,BS,True
 2,27274663000231,Tea Shop,Gastronomia,7,6,1773.18,BS,True
 2,41911591000136,Plié,Moda,8,7,1767.7,BS,True
-2,01512104026708,L'occitane Bresil,Beleza e Bem-estar,10,10,1736.29,BS,True
+2,01512104026708,L'Occitane Au Brésil,Beleza e Bem-estar,10,10,1736.29,BS,True
 2,31957862000130,Rip Curl,Moda,4,3,1729.92,BS,True
 2,14102914000178,MB acessórios,Presentes e Acessórios,11,9,1722.27,BS,True
 2,23449012000365,Quiksilver,Moda,3,3,1638.52,BS,True
 2,48328808000129,De Ville Gourmet,Gastronomia,23,16,1624.46,BS,True
 2,33927843000600,Ugg,Moda Feminina,1,1,1599.0,BS,True
-2,12136108005740,Monte Carlo Joias,Joalheria,1,1,1598.0,BS,True
+2,12136108005740,Monte Carlo,Joalheria,1,1,1598.0,BS,True
 2,03406250000467,Balneário Shopping - Estacionamento,Serviços,40,37,1485.0,BS,True
-2,33004058002025,Anselmi,Moda Feminina,1,1,1456.0,BS,True
 2,09111729000100,10 Pastéis,Gastronomia,38,22,1417.65,BS,True
 2,03959730000536,World Tennis,Calçados,6,5,1409.97,BS,True
 2,42887800000116,Giraffa's,Gastronomia,21,18,1397.0,BS,True
@@ -314,10 +305,9 @@
 2,01167639003063,Beagle,Moda,7,6,1279.44,BS,True
 2,26978754000295,Shantal Grill & Risoto,Gastronomia,9,7,1248.6,BS,True
 2,08985078000114,Subway,Gastronomia,31,23,1237.6,BS,True
-2,94087921001663,Gnc Balneario,Lazer,19,14,1193.0,BS,True
+2,94087921001663,GNC Cinemas,Lazer,19,14,1193.0,BS,True
 2,31848701000109,Cores em Cacau,Gastronomia,2,2,1165.2,BS,True
 2,30787452000126,Orientali,Gastronomia,18,14,1158.76,BS,True
-2,15048124004373,Sephora,Beleza e Bem-estar,1,1,1043.16,BS,True
 2,29155192000600,Duladu,Gastronomia,5,4,1019.7,BS,True
 2,02241978000170,Bonna Panquecas e Massas,Gastronomia,19,13,1019.5,BS,True
 2,02714890000129,Liquori Caffè Gourmet,Gastronomia,22,17,975.0,BS,True
@@ -326,48 +316,38 @@
 2,55403860000168,Buddha Spa,Serviços,4,3,838.0,BS,True
 2,25286562000174,Growfit,Gastronomia,8,7,791.5,BS,True
 2,57109588000133,Bondyou,Presentes e Acessórios,8,7,702.1,BS,True
-2,09611669018999,Animale,Moda Feminina,1,1,678.3,BS,True
 2,28436148000192,Valenttina,Moda Feminina,5,4,674.6,BS,True
 2,26715139000105,Fun Case,Eletrônicos,3,3,673.0,BS,True
 2,18865201000389,"Quem disse, Berenice?",Beleza e Bem-estar,12,11,664.35,BS,True
 2,60276975000179,Bread Pide,Gastronomia,15,14,660.29,BS,True
 2,39623353000183,Mr. Cheff,Gastronomia,11,5,486.88,BS,True
 2,15815603000623,Pecorino,Gastronomia,2,2,450.87,BS,True
-2,36485721001077,Patbo,Moda Feminina,1,1,375.0,BS,True
-2,49798673000128,Jah Açaí,Gastronomia,11,7,318.5,BS,True
+2,36485721001077,Pat Bo,Moda Feminina,1,1,375.0,BS,True
+2,49798673000128,Jah Açai,Gastronomia,11,7,318.5,BS,True
 2,03888580000274,Bob's,Gastronomia,12,10,292.8,BS,True
 2,38468167000154,Los Mariachis,Gastronomia,4,1,223.0,BS,True
 2,06102194000112,Chilli Beans,Ótica,1,1,199.98,BS,True
 2,23486280000195,Clube Melissa,Calçados,2,2,190.9,BS,True
 2,31738634000170,Acium,Presentes e Acessórios,1,1,184.81,BS,True
 2,53599236000152,Nutty Bavarian,Gastronomia,4,4,174.0,BS,True
-2,49538746000142,Milky moo,Gastronomia,2,2,141.0,BS,True
+2,49538746000142,Milky Moo,Gastronomia,2,2,141.0,BS,True
 2,58740351000119,Juistreet,Gastronomia,3,2,98.8,BS,True
 2,46035164000155,Roasted Potato & Suco Bagaço,Gastronomia,9,8,92.0,BS,True
 2,41908357000150,Acuvue Lentes,Ótica,0,0,0.0,BS,False
-2,55457158000187,Biscoitê,Calçados,0,0,0.0,BS,False
 2,20036374000255,Boiko,Joalheria,0,0,0.0,BS,False
 2,33443501000100,Calzedonia,Moda,0,0,0.0,BS,False
 2,23844753000189,Celular Shop,Eletrônicos,0,0,0.0,BS,False
-2,15425654003400,Cotton On,Beleza e Bem-estar,0,0,0.0,BS,False
 2,16831908000187,Crocs,Calçados,0,0,0.0,BS,False
-2,61682759000277,Dengo,Beleza e Bem-estar,0,0,0.0,BS,False
+2,28281777000271,D'VIE Joalheria,Joalheria,0,0,0.0,BS,False
 2,30116147000102,Detoni Beauty,Beleza e Bem-estar,0,0,0.0,BS,False
-2,28281777000271,Dvie Joalheria,Joalheria,0,0,0.0,BS,False
 2,39403434000178,FORUM,Moda,0,0,0.0,BS,False
 2,04852969000141,FREDDO,Gastronomia,0,0,0.0,BS,False
-2,12015273000199,Game Mania,Eletrônicos,0,0,0.0,BS,False
-2,51321247000574,Kings Sneakers,Calçados,0,0,0.0,BS,False
 2,28111855000109,L'Oréal Kerastase,Beleza e Bem-estar,0,0,0.0,BS,False
 2,25291503000194,Las Leñas,Gastronomia,0,0,0.0,BS,False
 2,45021942000194,Lavi Sunglasses,Ótica,0,0,0.0,BS,False
 2,02455036009303,Motorola,Telefonia,0,0,0.0,BS,False
 2,05337063000151,New Era,Moda,0,0,0.0,BS,False
-2,61793720000146,Oculum,Calçados,0,0,0.0,BS,False
 2,46424765000150,Ojo by mr.ray,Ótica,0,0,0.0,BS,False
-2,92665611000177,PANVEL,Farmácias,0,0,0.0,BS,False
-2,07082391000694,PRATA FINA,Joalheria,0,0,0.0,BS,False
-2,33962799000156,Padrão,Calçados,0,0,0.0,BS,False
 2,45687735000173,Reserva,Moda,0,0,0.0,BS,False
 2,55648279000106,Simmons,Casa e Decoração,0,0,0.0,BS,False
 2,51149681000195,Smart Case,Eletrônicos,0,0,0.0,BS,False
@@ -386,7 +366,7 @@
 3,37749600000167,Óticas Carol,Ótica,22,21,42360.69,NK,True
 3,47100110025698,Brooksfield,Moda,29,25,41356.42,NK,True
 3,11278233000177,Cacau Show,Gastronomia,260,203,39099.61,NK,True
-3,00776574158612,LOJAS AMERICANAS,Eletrodomésticos,482,300,32283.97,NK,True
+3,00776574158612,Americanas,Eletrodomésticos,482,300,32283.97,NK,True
 3,49669856005374,Le Lis,Moda,22,18,28659.41,NK,True
 3,05570154001457,Adidas,Esportes,46,41,28586.14,NK,True
 3,58731662011407,Ri Happy,Infantil,136,112,28140.77,NK,True
@@ -434,8 +414,8 @@
 3,48911062000262,Democrata,Calçados,18,16,7887.65,NK,True
 3,02509838000130,Laci Baruffi,Presentes e Acessórios,12,12,7785.45,NK,True
 3,53262111000132,Kings Sneakers,Calçados,10,10,7696.76,NK,True
-3,58891504012054,Kfc,Gastronomia,142,102,7636.57,NK,True
-3,49961545006194,Paquetá,Esportes,24,18,7633.66,NK,True
+3,58891504012054,KFC,Gastronomia,142,102,7636.57,NK,True
+3,49961545006194,Paquetá,Calçados,24,18,7633.66,NK,True
 3,44807560000128,Lupo,Moda,42,38,7601.1,NK,True
 3,31723932000358,Kombina Felice,Gastronomia - Restaurante,34,27,7438.06,NK,True
 3,29174375000150,Mini Kalzone,Gastronomia,298,164,6788.8,NK,True
@@ -452,7 +432,7 @@
 3,28659861000103,Authentic Feet,Moda,9,9,5440.41,NK,True
 3,40432544007079,Claro,Telefonia,3,2,5236.0,NK,True
 3,73365470000122,Due Sapori,Gastronomia,83,52,4862.88,NK,True
-3,10872187000762,Ophicina Footwear,Moda,10,9,4782.36,NK,True
+3,10872187000762,Ophicina Footwear,Calçados,10,9,4782.36,NK,True
 3,73846347000719,Daniela Tombini,Moda,12,7,4717.54,NK,True
 3,02421421005776,TIM,Telefonia,1,1,4487.76,NK,True
 3,46817768000153,World Tennis,Calçados,10,9,4257.63,NK,True
@@ -496,29 +476,24 @@
 3,33217311000590,Unizushi,Gastronomia,3,3,871.2,NK,True
 3,57607058000115,SmartCase,Eletrônicos,3,3,638.9,NK,True
 3,62589660000107,QÓculos,Ótica,3,3,583.43,NK,True
-3,60061352000189,Camarão Express,Gastronomia,8,7,425.9,NK,True
 3,57175087000155,SmartCase,Eletrônicos,2,2,409.9,NK,True
 3,39566766000173,Empório Sabores do Mundo,Gastronomia,6,5,272.0,NK,True
 3,52171467000106,Milky Moo,Gastronomia,4,4,187.0,NK,True
-3,57987840000379,Acium,Joalheria,1,1,119.0,NK,True
 3,63136882000137,Crepefy,Gastronomia,3,3,115.95,NK,True
 3,42591651138170,Mc Donald´s Quiosque 1,Fast Food,7,7,115.8,NK,True
 3,42591651138331,McDonald´s Quiosque,Gastronomia,5,4,103.3,NK,True
-3,50248089000188,LAtte Art Coffee Cafeteria,Gastronomia,2,2,40.0,NK,True
+3,50248089000188,Café da Praça,Gastronomia,2,2,40.0,NK,True
 3,50721523000103,Acuvue,Ótica,0,0,0.0,NK,False
-3,44861803000106,Adcos,Beleza e Bem-estar,0,0,0.0,NK,False
 3,65788814000188,B&C Balas,Outros,0,0,0.0,NK,False
-3,51344227000195,BRANDO BIKE,Presentes e Acessórios,0,0,0.0,NK,False
 3,07737623007950,Bodytech,Serviços,0,0,0.0,NK,False
-3,01687411000674,Chuá,Moda,0,0,0.0,NK,False
-3,08545793000136,Cvc Viagens,Serviços,0,0,0.0,NK,False
+3,08545793000136,CVC Turismo,Serviços,0,0,0.0,NK,False
 3,57341635000170,Don Barber,Beleza e Bem-estar,0,0,0.0,NK,False
 3,08845676046260,Espaço Laser,Beleza e Bem-estar,0,0,0.0,NK,False
 3,52758327000120,Estação BrinCar,Lazer,0,0,0.0,NK,False
+3,46699390000130,H'Cel,Eletrônicos,0,0,0.0,NK,False
 3,02455036009656,Motorola,Telefonia,0,0,0.0,NK,False
-3,46699390000130,O MUNDO DAS CAPAS,Telefonia,0,0,0.0,NK,False
 3,06269953002856,Pegada,Calçados,0,0,0.0,NK,False
-3,51012602000108,Prime Car Detailing,Serviços,0,0,0.0,NK,False
+3,51012602000108,Prime Car Detailing,Lavação Automotiva,0,0,0.0,NK,False
 3,55582739000493,Shelf,Supermercado,0,0,0.0,NK,False
 4,24823012000184,Sabor Brasileiro,Gastronomia,662,41,86224.3,NR,True
 4,75315333021297,Atacadão,Supermercado,521,222,75121.82,NR,True
@@ -543,13 +518,13 @@
 4,84453844051769,Vivara,Joalheria,13,12,7773.0,NR,True
 4,30670630000304,Hering,Moda,17,16,7747.64,NR,True
 4,33041260129361,Casas Bahia,Eletrodomésticos,5,4,6994.2,NR,True
-4,42591651143173,Mc Donalds,Gastronomia,130,94,6841.71,NR,True
+4,42591651143173,Mc Donald's,Gastronomia,130,94,6841.71,NR,True
 4,23400951000234,Arezzo,Calçados,15,10,6305.51,NR,True
 4,08718972000802,Leo Cosméticos,Beleza e Bem-estar,77,69,6018.93,NR,True
 4,01167639004620,Beagle,Moda,12,12,5402.75,NR,True
 4,09554846000148,Mini Kalzone,Gastronomia,214,141,5185.5,NR,True
 4,92665611072089,Panvel Farmácias,Farmácias,63,53,5130.02,NR,True
-4,49961545006437,Paquetá,Esportes,20,16,4342.7,NR,True
+4,49961545006437,Paquetá,Calçados,20,16,4342.7,NR,True
 4,57834082000197,World Tennis,Calçados,13,13,4295.0,NR,True
 4,11137051009990,O Boticário,Beleza e Bem-estar,40,35,4081.07,NR,True
 4,18704273002045,Toni Toys,Infantil,16,15,3848.76,NR,True
@@ -587,7 +562,7 @@
 4,11140451000221,Norte Shopping - Estacionamento,Serviços,14,9,234.0,NR,True
 4,42904620000286,Tech Smart,Eletrônicos,1,1,199.9,NR,True
 4,14477520000102,Missbely,Presentes e Acessórios,2,2,134.8,NR,True
-4,36613143000116,Celulares e Cia.,Eletrônicos,1,1,89.0,NR,True
+4,36613143000116,Celulares & Cia,Eletrônicos,1,1,89.0,NR,True
 4,48767159000162,Bob's (Quiosque 1),Gastronomia - Sorvetes,4,3,84.0,NR,True
 4,61268451000107,TOUTI Blumenau,Beleza e Bem-estar,1,1,79.9,NR,True
 4,31428749000168,Bob's (Quiosque 2),Gastronomia - Sorvetes,2,2,36.0,NR,True
@@ -676,7 +651,7 @@
 5,36759335000135,Botoclinic,Beleza e Bem-estar,3,2,4497.0,GS,True
 5,51940460000130,KFC,Gastronomia,83,53,4443.54,GS,True
 5,57989880000198,Mamma Mia,Gastronomia,18,17,4371.3,GS,True
-5,49961545006275,Paquetá Esportes,Esportes,18,14,3689.72,GS,True
+5,49961545006275,Paquetá,Calçados,18,14,3689.72,GS,True
 5,59394900000103,LUZ DA LUA,Calçados,5,5,3491.1,GS,True
 5,33977757000199,Lupo,Moda,13,13,3433.98,GS,True
 5,39264947000307,O Boticário,Beleza e Bem-estar,43,35,3422.34,GS,True
@@ -684,24 +659,23 @@
 5,44431520000205,Ótica Chilli Beans,Ótica,3,3,2970.97,GS,True
 5,30296846000181,Reserva,Moda,8,8,2864.0,GS,True
 5,45255246000223,Chilli Beans,Ótica,5,5,2849.82,GS,True
-5,53671208000107,Kib´s,Kids,43,28,2808.46,GS,True
+5,53671208000107,Kib's Cozinha Árabe,Gastronomia,43,28,2808.46,GS,True
 5,43199852000162,ADCOS,Beleza e Bem-estar,7,7,2730.46,GS,True
 5,39400857000134,Grano Pasta Ristorante,Gastronomia,52,18,2711.6,GS,True
 5,35307083000140,Montana Grill,Gastronomia,44,27,2545.26,GS,True
 5,29100635000223,Bibi Calçados,Calçados,9,9,2536.77,GS,True
 5,62800563000111,Criamigos,Presentes e Acessórios,10,7,2441.9,GS,True
 5,06269953002775,Calçados Pegada,Calçados,3,3,2434.97,GS,True
-5,94087921001825,Gnc Joinville Garten,Lazer,23,8,2389.5,GS,True
+5,94087921001825,GNC Cinemas,Lazer,23,8,2389.5,GS,True
 5,11377588000385,Burger King,Gastronomia,44,35,2352.59,GS,True
 5,48843062000191,Café Cultura,Gastronomia,49,33,2061.05,GS,True
 5,04405428003190,Inovathi Acessórios,Presentes e Acessórios,6,6,2029.71,GS,True
 5,00391152000243,Purpurata,Presentes e Acessórios,11,11,2017.35,GS,True
 5,45048678000182,Casa Bauducco,Gastronomia,29,27,1998.62,GS,True
-5,05570154001880,.,Calçados,3,3,1979.96,GS,True
 5,57705797000140,Griletto,Gastronomia - Restaurante,32,19,1835.13,GS,True
 5,49237775000174,Natura,Beleza e Bem-estar,15,15,1825.1,GS,True
 5,11817447000174,Subway,Gastronomia,41,27,1782.4,GS,True
-5,60245324000111,Metroville Prime Grill,Gastronomia,37,22,1747.61,GS,True
+5,60245324000111,Metroville,Gastronomia,37,22,1747.61,GS,True
 5,52226880000112,NOHA SHOES,Calçados,4,4,1679.0,GS,True
 5,20903782000267,Officina do Celular,Eletrônicos,5,4,1519.65,GS,True
 5,56008268000124,CANTINA MATTERELLO RESTAURANTE E PASTELARIA,Gastronomia,37,21,1430.82,GS,True
@@ -719,21 +693,20 @@
 5,55261114000187,Baummer Semijóias,Presentes e Acessórios,8,8,844.84,GS,True
 5,60118590000183,Freddo,Gastronomia,20,18,801.8,GS,True
 5,52254982000141,Shawarma Food Joinville,Gastronomia,12,9,666.1,GS,True
-5,60365344000126,Piastrini Joinville - Optica Machota,Ótica e Joalheria,1,1,635.0,GS,True
+5,60365344000126,Piastrine Joalheria e Óptica,Ótica e Joalheria,1,1,635.0,GS,True
 5,03366550000389,Manly,Moda Feminina,4,4,612.62,GS,True
 5,01512104028409,L'occitane Au Brasil,Beleza e Bem-estar,4,4,535.94,GS,True
 5,57987840000107,Acium,Presentes e Acessórios,1,1,476.0,GS,True
-5,61038361000111,Duplicado*,Moda,2,1,476.0,GS,True
+5,61038361000111,COLCCI,Moda,2,1,476.0,GS,True
 5,55159247000490,Bull Prime Steak House,Gastronomia,2,2,422.0,GS,True
 5,51233308000118,CAPA FINA,Telefonia,5,4,357.53,GS,True
 5,05612076000272,Jack Simonéia Garten,Salão de Beleza | Barbearia,1,1,333.5,GS,True
 5,02455036001833,Samsung,Eletrônicos,1,1,309.0,GS,True
 5,53966834000112,TNG,Moda,1,1,299.98,GS,True
 5,53372883000127,Chiquinho Sorvetes,Gastronomia - Sorvetes,13,13,297.5,GS,True
-5,53943371000173,Wow Park,Infantil,1,1,140.0,GS,True
+5,53943371000173,WOW PARK,Infantil,1,1,140.0,GS,True
 5,48133012000110,Fini,Gastronomia,8,6,129.53,GS,True
 5,54329494000181,Tabacaria E Presentes Trevo,Serviços,1,1,89.9,GS,True
-5,61818909000146,10 Pastéis Joinville,Gastronomia,0,0,0.0,GS,False
 5,13334184000178,AJFans Garten,Promocional,0,0,0.0,GS,False
 5,37101639000173,Arranjos Express,Serviços,0,0,0.0,GS,False
 5,76535111003775,Bergerson,Joalheria,0,0,0.0,GS,False
@@ -749,20 +722,20 @@
 5,39851186000128,Damay Cafeteria,Gastronomia,0,0,0.0,GS,False
 5,54665649000150,Digital Duo,Eletrônicos,0,0,0.0,GS,False
 5,52580104000540,Divert Park,Infantil,0,0,0.0,GS,False
+5,40711275000158,Donna Mirô,Gastronomia,0,0,0.0,GS,False
 5,39566766000173,Empório Sabores do Mundo,Gastronomia,0,0,0.0,GS,False
 5,55171759000129,Fg Smart,Supermercado,0,0,0.0,GS,False
-5,47682705000108,Fun Case,Telefonia,0,0,0.0,GS,False
+5,47682705000108,Fun Case,Eletrônicos,0,0,0.0,GS,False
 5,34619209000150,Fun Photos,Lazer,0,0,0.0,GS,False
 5,10257908000210,Garten Shopping - Estacionamento,Serviços,0,0,0.0,GS,False
 5,24999384000166,Garten Shopping Estacionamento II,Serviços,0,0,0.0,GS,False
 5,65056824000129,Giardino,Gastronomia,0,0,0.0,GS,False
 5,47318667000109,Loterica Garten,Serviços,0,0,0.0,GS,False
-5,07719288001412,Maze Skate,Moda,0,0,0.0,GS,False
+5,07719288001412,Maze,Moda,0,0,0.0,GS,False
 5,52502883000131,Nutty Bavarian,Gastronomia,0,0,0.0,GS,False
 5,10872187001149,Ophicina,Moda,0,0,0.0,GS,False
 5,92665611000177,PANVEL,Farmácias,0,0,0.0,GS,False
 5,27644793000138,Rochelli Calçados,Calçados,0,0,0.0,GS,False
-5,40711275000158,St. Chicken,Gastronomia,0,0,0.0,GS,False
 5,02421421007205,TIM,Telefonia,0,0,0.0,GS,False
 5,31179881000183,Trem Bala,Gastronomia,0,0,0.0,GS,False
 5,22873513000140,Uplay Fitness,Serviços,0,0,0.0,GS,False
@@ -795,10 +768,10 @@
 6,47276532000110,Bagaggio,Presentes e Acessórios,11,11,7482.23,NS,True
 6,72305295001278,Ritmi Studio,Moda Feminina,26,26,7228.4,NS,True
 6,92665611044387,Panvel Farmácias,Farmácias,56,45,7149.33,NS,True
-6,52744974000183,Hope Nacoes Shopping,Outros,24,21,7074.0,NS,True
+6,52744974000183,Hope,Moda,24,21,7074.0,NS,True
 6,83729004014869,Damyller,Moda,4,4,7000.0,NS,True
-6,58909981000174,Kopenhagen,Não informado,58,53,6911.06,NS,True
-6,47582836000105,Reserva Nacoes Shopping,Moda,8,8,6767.0,NS,True
+6,58909981000174,Kopenhagen,Gastronomia,58,53,6911.06,NS,True
+6,47582836000105,Reserva,Moda,8,8,6767.0,NS,True
 6,79653119001004,Lança Perfume,Moda,4,3,6747.3,NS,True
 6,30262219000120,Fátima Criança,Infantil,31,27,6566.69,NS,True
 6,35146704000151,Avatim,Beleza e Bem-estar,40,35,6367.5,NS,True
@@ -810,22 +783,20 @@
 6,39875207000145,Calvin Klein e Tommy Hilfiger,Moda,6,5,4781.0,NS,True
 6,10713910000175,Lupo,Moda,26,24,4714.05,NS,True
 6,35235219000154,Camarão Express,Gastronomia,53,41,4677.12,NS,True
-6,13257648014220,Grandvision By Fototica,Gastronomia - Restaurante,3,2,4435.0,NS,True
 6,60491000000163,Wepink,Beleza e Bem-estar,33,27,4208.6,NS,True
 6,61654310000114,Crocs,Calçados,12,12,4007.67,NS,True
 6,25391813000180,Santo Boteco,Gastronomia,36,22,3928.22,NS,True
-6,10872187000843,Ophicina Foot Wear,Não informado,4,4,3598.98,NS,True
+6,10872187000843,Ophicina Foot Wear,Calçados,4,4,3598.98,NS,True
 6,24149753000121,Mini Kalzone,Gastronomia,156,100,3500.7,NS,True
 6,63075248000131,Royal Trudel,Gastronomia,54,32,3419.89,NS,True
 6,11377588005344,Burger King,Gastronomia,63,49,3396.8,NS,True
 6,57136139000184,Chilli Beans,Ótica,6,6,3054.87,NS,True
 6,54311968000168,Adcos,Beleza e Bem-estar,4,4,3026.96,NS,True
-6,13393158004108,Me Linda,Farmácias,19,16,2927.1,NS,True
 6,17261661021332,Outback SteakHouse,Gastronomia,14,14,2775.28,NS,True
 6,00776574161087,Americanas,Eletrodomésticos,27,22,2772.99,NS,True
 6,35509912000259,Havaianas,Calçados,28,26,2596.59,NS,True
 6,57067731000171,Mamma Mia Galeto,Gastronomia,8,8,2582.41,NS,True
-6,58891504013379,z Kfc,Gastronomia,54,43,2500.29,NS,True
+6,58891504013379,KFC,Gastronomia,54,43,2500.29,NS,True
 6,52003898000406,Tigre Maníacos,Esportes,9,8,2330.9,NS,True
 6,50689531000101,Natura,Beleza e Bem-estar,21,21,2281.82,NS,True
 6,58731662012632,Ri Happy,Infantil,17,16,2211.56,NS,True
@@ -851,19 +822,19 @@
 6,43758381000185,Subway,Gastronomia,19,13,1032.4,NS,True
 6,25175433000109,AJFans Nações,Promocional,2,2,1000.0,NS,True
 6,41835278000166,Via Pian Food,Gastronomia,17,13,949.62,NS,True
-6,94087921002040,Gnc Cinemas,Lazer,14,13,877.5,NS,True
+6,94087921002040,GNC Cinemas,Lazer,14,13,877.5,NS,True
 6,24348212000122,z Bob's - Quiosque 2,Gastronomia,22,21,861.6,NS,True
 6,57185384000181,Essence Parfums,Beleza e Bem-estar,1,1,839.37,NS,True
 6,28764122000173,Baummer,Joalheria,6,6,719.21,NS,True
 6,48843215000109,Kitsu Box,Gastronomia,6,6,647.0,NS,True
 6,50257154000131,Panda Sushi,Gastronomia,9,9,487.64,NS,True
-6,54679548000139,Milkymoo,Gastronomia - Sorvetes,11,9,379.0,NS,True
-6,05571901000238,Maxmuscle,Esportes,2,2,347.0,NS,True
+6,54679548000139,Milky Moo,Gastronomia - Sorvetes,11,9,379.0,NS,True
+6,05571901000238,Max Muscle,Esportes,2,2,347.0,NS,True
 6,43757406000126,Fábrica Di Chocolate,Gastronomia,4,3,340.69,NS,True
 6,39264947000307,O Boticário,Beleza e Bem-estar,2,2,331.8,NS,True
 6,24316506000172,Chef's & Fritas,Gastronomia,3,3,287.4,NS,True
 6,62933990000178,Milky Moo - Quiosque,Gastronomia,10,5,258.0,NS,True
-6,13350736000301,Gio Gelato Sorveteria Italiana Artesanal,Não informado,8,5,237.45,NS,True
+6,13350736000301,Gio Gelato,Gastronomia - Sorvetes,8,5,237.45,NS,True
 6,40711275000239,St.Chicken,Gastronomia,3,3,232.8,NS,True
 6,50906474000175,Café Cultura,Gastronomia,5,5,198.0,NS,True
 6,20553615000152,Fini,Gastronomia,7,4,93.32,NS,True
@@ -875,26 +846,23 @@
 6,34216722000108,Tabacaria El Patrono,Presentes e Acessórios,1,1,39.9,NS,True
 6,26585335000102,Drive Kids,Lazer,1,1,30.0,NS,True
 6,49039419000146,Chope do Mestre,Gastronomia,2,1,16.0,NS,True
-6,51589366000189,Antonio's Boliche,Gastronomia - Sorvetes,0,0,0.0,NS,False
+6,48643676000120,Acium,Presentes e Acessórios,0,0,0.0,NS,False
 6,50878192000101,Antonio's Boliche,Lazer,0,0,0.0,NS,False
-6,20477705000373,Cases e Capas,Presentes e Acessórios,0,0,0.0,NS,False
-6,57260323000131,Dez Pastéis,Gastronomia,0,0,0.0,NS,False
+6,20477705000373,Cases e Capas,Eletrônicos,0,0,0.0,NS,False
 6,13199605000286,Don Pettine,Salão de Beleza | Barbearia,0,0,0.0,NS,False
 6,36188244000197,Engenharia do Corpo Academia,Serviços,0,0,0.0,NS,False
 6,08845676037784,Espaço Laser,Beleza e Bem-estar,0,0,0.0,NS,False
 6,32122105000100,Extreme Kart,Lazer,0,0,0.0,NS,False
-6,28192387000810,FREDDO GELATERIA,Gastronomia,0,0,0.0,NS,False
 6,48094086000195,H2O Car Wash,Serviços,0,0,0.0,NS,False
 6,62211969000169,Inspire Predrarias,Joalheria,0,0,0.0,NS,False
-6,33647517000207,KStore Acessórios,Presentes e Acessórios,0,0,0.0,NS,False
-6,65174130000196,Lez a Lez,Moda Feminina,0,0,0.0,NS,False
+6,33647517000207,KStore Acessórios,Eletrônicos,0,0,0.0,NS,False
 6,31720333000380,Livre Mix,Joalheria,0,0,0.0,NS,False
 6,01477466000650,McDonald's,Gastronomia,0,0,0.0,NS,False
 6,20540181000156,Nações Shopping Estacionamento,Não informado,0,0,0.0,NS,False
 6,20540181000318,Nações Shopping Estacionamento II,Serviços,0,0,0.0,NS,False
 6,37283459000150,Ortobom,Casa e Decoração,0,0,0.0,NS,False
 6,43068728000168,Planet Games,Lazer,0,0,0.0,NS,False
-6,56294063000403,Provin Jóias,Não informado,0,0,0.0,NS,False
+6,56294063000403,Provin,Joalheria,0,0,0.0,NS,False
 6,57188074000110,Sapataria do Futuro,Serviços,0,0,0.0,NS,False
 6,60937194000188,Smartcase,Eletrônicos,0,0,0.0,NS,False
 6,14440687000786,Vialaser,Beleza e Bem-estar,0,0,0.0,NS,False
@@ -902,4 +870,3 @@
 6,51209371000119,Vortex Viagens,Serviços,0,0,0.0,NS,False
 6,59937950000190,Vortex Vistos,Serviços,0,0,0.0,NS,False
 6,55653736000231,Yan Eletroeletrônicos,Eletrônicos,0,0,0.0,NS,False
-6,48643676000120,z SH JOIAS,Presentes e Acessórios,0,0,0.0,NS,False
