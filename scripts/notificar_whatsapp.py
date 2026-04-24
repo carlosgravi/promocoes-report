@@ -26,7 +26,7 @@ DASHBOARD_CONFIG = {
     "Promocoes Report": {
         "emoji": "\U0001F3AF",       # 🎯
         "url": "https://promocoes-report.streamlit.app",
-        "repo": "carlosgravi/promocoes-report",
+        "repo": "grupoalmeidajunior/promocoes-report",
     },
     "Perfil de Cliente": {
         "emoji": "\U0001F464",       # 👤
