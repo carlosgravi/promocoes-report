@@ -144,3 +144,23 @@ Dashboard vinha mostrando **30.224 cupons / R$ 7,25 M** quando os valores reais 
 | GS | 5.125 | R$ 1.210.212,77 | 1.375 |
 | NS | 3.919 | R$ 1.032.365,42 | 1.188 |
 | **TOTAL** | **40.064** | **R$ 10.029.763,15** | **9.836** |
+
+---
+
+## Migracao para GitHub organizacional (24/04/2026)
+
+Repositorio transferido de `carlosgravi/promocoes-report` para
+`grupoalmeidajunior/promocoes-report` via API Transfer Ownership.
+
+**Preservado no transfer:**
+- 7 secrets Snowflake
+- Runner self-hosted `actions-runner-promocoes` (continuou online)
+- Workflow `Atualizar Dados Promocao` testado e validado apos migracao
+
+**Deploy Streamlit Cloud recriado** na conta `almeida-junior-lakehouse`.
+Este dashboard nao usa `st.secrets`, entao nao requer secrets.toml.
+
+**Arquivos atualizados:**
+- `scripts/notificar_whatsapp.py` — DASHBOARD_CONFIG
+- `CONTEXTO_PROJETO.md` — link do repositorio
+
